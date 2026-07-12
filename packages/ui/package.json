@@ -1,0 +1,55 @@
+{
+  "name": "@fixerframework/ui",
+  "version": "0.1.0",
+  "description": "Preact UI primitives and state bridges for FixerFramework",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "./dist/theme.css"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./theme.css": "./dist/theme.css"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "fixer-bundle --mode lib --no-format --no-lint --no-typecheck --no-test",
+    "check": "fixer-bundle --mode lib --no-build",
+    "test": "vitest run",
+    "prepublishOnly": "bun run build"
+  },
+  "publishConfig": {
+    "registry": "https://registry.fixerframework.com",
+    "access": "public"
+  },
+  "dependencies": {
+    "@fixerframework/animation": "workspace:*",
+    "@fixerframework/state": "workspace:*",
+    "@preact/compat": "catalog:preact",
+    "@preact/signals-core": "catalog:preact",
+    "class-variance-authority": "catalog:ui",
+    "clsx": "catalog:ui",
+    "tailwind-merge": "catalog:ui"
+  },
+  "devDependencies": {
+    "@fixerframework/bundler": "workspace:*",
+    "@types/bun": "catalog:types",
+    "@types/node": "catalog:types",
+    "@vitest/utils": "catalog:",
+    "happy-dom": "catalog:ui",
+    "preact": "catalog:peers",
+    "vite": "catalog:peers",
+    "vitest": "catalog:binaries"
+  },
+  "peerDependencies": {
+    "preact": "catalog:peers"
+  }
+}

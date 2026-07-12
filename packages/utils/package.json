@@ -1,0 +1,35 @@
+{
+  "name": "@fixerframework/utils",
+  "version": "0.1.0",
+  "description": "Shared utilities for FixerFramework — type guards, serialization, async, JWT, cookies",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "fixer-bundle --mode lib --no-format --no-lint --no-typecheck --no-test",
+    "check": "fixer-bundle --mode lib --no-build",
+    "test": "vitest run",
+    "prepublishOnly": "bun run build"
+  },
+  "publishConfig": {
+    "registry": "https://registry.fixerframework.com",
+    "access": "public"
+  },
+  "devDependencies": {
+    "@fixerframework/bundler": "workspace:*",
+    "@types/bun": "catalog:types",
+    "vitest": "catalog:binaries"
+  }
+}

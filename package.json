@@ -1,0 +1,91 @@
+{
+  "name": "fixerframework",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/**"
+    ],
+    "catalogs": {
+      "workspace": {
+        "@fixerframework/auth": "workspace:*",
+        "@fixerframework/ui": "workspace:*",
+        "@fixerframework/state": "workspace:*",
+        "@fixerframework/animation": "workspace:*",
+        "@fixerframework/router": "workspace:*",
+        "@fixerframework/bundler": "workspace:*",
+        "@fixerframework/utils": "workspace:*",
+        "@fixerframework/adapters": "workspace:*"
+      },
+      "clerk": {
+        "@auth/core": "0.34.3",
+        "@clerk/backend": "3.10.0",
+        "@clerk/clerk-js": "6.23.0"
+      },
+      "preact": {
+        "preact": "10.29.4",
+        "preact-render-to-string": "6.7.0",
+        "@preact/compat": "18.3.2",
+        "@preact/signals": "2.9.2",
+        "@preact/signals-core": "1.14.3",
+        "@preact/signals-react": "3.10.2",
+        "@preact/signals-react-transform": "0.8.1"
+      },
+      "typescript": {
+        "@typescript/native-preview": "7.0.0-dev.20260707.2",
+        "typescript": "latest",
+        "@typescript/native-preview-linux-x64": "7.0.0-dev.20260707.2"
+      },
+      "types": {
+        "@types/node": "latest",
+        "@types/bun": "latest"
+      },
+      "ui": {
+        "class-variance-authority": "0.7.1",
+        "clsx": "2.1.1",
+        "tailwind-merge": "3.3.1",
+        "happy-dom": "18.0.1"
+      },
+      "bindings": {
+        "@oxfmt/binding-linux-x64-gnu": "0.58.0",
+        "@oxlint/binding-linux-x64-gnu": "1.73.0",
+        "@rolldown/binding-linux-x64-gnu": "1.1.5",
+        "lightningcss-linux-x64-gnu": "1.32.0"
+      },
+      "binaries": {
+        "oxfmt": "0.58.0",
+        "oxlint": "1.73.0",
+        "rolldown": "1.1.5",
+        "vite": "8.1.4",
+        "vitest": "4.1.10"
+      },
+      "peers": {
+        "preact": "10.29.4",
+        "typescript": "latest",
+        "vite": "8.1.4"
+      }
+    },
+    "catalog": {
+      "@vitest/utils": "4.1.10"
+    }
+  },
+  "scripts": {
+    "format": "oxfmt --write",
+    "lint": "oxlint --fix",
+    "test": "bun run --filter '@fixerframework/*' test",
+    "build": "bun run ./scripts/build-packages.ts",
+    "pack:check": "bun run ./scripts/pack-check.ts"
+  },
+  "devDependencies": {
+    "@oxfmt/binding-linux-x64-gnu": "catalog:bindings",
+    "@oxlint/binding-linux-x64-gnu": "catalog:bindings",
+    "@rolldown/binding-linux-x64-gnu": "catalog:bindings",
+    "lightningcss-linux-x64-gnu": "catalog:bindings",
+    "oxfmt": "catalog:binaries",
+    "oxlint": "catalog:binaries",
+    "preact": "catalog:peers",
+    "rolldown": "catalog:binaries",
+    "typescript": "catalog:peers",
+    "vite": "catalog:binaries",
+    "vitest": "catalog:binaries"
+  }
+}

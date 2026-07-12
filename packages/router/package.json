@@ -1,0 +1,46 @@
+{
+  "name": "@fixerframework/router",
+  "version": "0.1.0",
+  "description": "Declarative SPA router for Preact — nested layouts, loaders, signals location",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "fixer-bundle --mode lib --no-format --no-lint --no-typecheck --no-test",
+    "check": "fixer-bundle --mode lib --no-build",
+    "test": "vitest run",
+    "prepublishOnly": "bun run build"
+  },
+  "publishConfig": {
+    "registry": "https://registry.fixerframework.com",
+    "access": "public"
+  },
+  "dependencies": {
+    "@preact/signals-core": "catalog:preact"
+  },
+  "devDependencies": {
+    "@fixerframework/bundler": "workspace:*",
+    "@types/bun": "catalog:types",
+    "@types/node": "catalog:types",
+    "@vitest/utils": "catalog:",
+    "happy-dom": "catalog:ui",
+    "preact": "catalog:peers",
+    "vite": "catalog:peers",
+    "vitest": "catalog:binaries"
+  },
+  "peerDependencies": {
+    "preact": "catalog:peers"
+  }
+}
