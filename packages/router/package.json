@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "description": "Declarative SPA router for Preact — nested layouts, loaders, signals location",
   "license": "MIT",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.js",
@@ -13,19 +17,15 @@
       "import": "./dist/index.js"
     }
   },
-  "files": [
-    "dist",
-    "README.md"
-  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.fixerframework.com"
+  },
   "scripts": {
     "build": "fixer-bundle --mode lib --no-format --no-lint --no-typecheck --no-test",
     "check": "fixer-bundle --mode lib --no-build --format-check",
     "test": "vitest run",
     "prepublishOnly": "bun run build"
-  },
-  "publishConfig": {
-    "registry": "https://registry.fixerframework.com",
-    "access": "public"
   },
   "dependencies": {
     "@preact/signals-core": "catalog:preact"

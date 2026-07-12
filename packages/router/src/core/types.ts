@@ -20,6 +20,7 @@ export interface NavigateOptions {
 export interface LoaderContext {
   params: Record<string, string>;
   pathname: string;
+  /** Search string including `?`, or `""`. Loader reuse includes search (not hash). */
   search: string;
   searchParams: URLSearchParams;
   signal: AbortSignal;
@@ -66,6 +67,8 @@ export interface HistoryAdapter {
   replace(to: HistoryLocation): void;
   back(): void;
   listen(listener: (loc: HistoryLocation) => void): () => void;
+  /** Release global listeners (e.g. `popstate`). Safe to call more than once. */
+  dispose?(): void;
 }
 
 export type HistoryKind = "browser" | "memory";
@@ -83,6 +86,8 @@ export interface CreateRouterOptions {
 }
 
 export interface RouterRuntime {
+  /** Deploy base (e.g. `"/app"`), or `"/"` when none. History URLs include base; `location` does not. */
+  readonly base: string;
   readonly location: Signal<LocationState>;
   readonly params: Signal<Record<string, string>>;
   readonly matches: Signal<RouteMatch[]>;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createMemoryHistory } from "../src/core/history.ts";
+import { createBrowserHistory, createMemoryHistory } from "../src/core/history.ts";
 
 describe("createMemoryHistory", () => {
   it("starts at initial path", () => {
@@ -28,5 +28,31 @@ describe("createMemoryHistory", () => {
     expect(h.location.pathname).toBe("/b");
     h.back();
     expect(h.location.pathname).toBe("/");
+  });
+});
+
+describe("createBrowserHistory", () => {
+  it("detaches popstate when last listener unsubscribes", () => {
+    const h = createBrowserHistory();
+    let fires = 0;
+    const unsub = h.listen(() => {
+      fires++;
+    });
+    window.dispatchEvent(new PopStateEvent("popstate"));
+    expect(fires).toBe(1);
+    unsub();
+    window.dispatchEvent(new PopStateEvent("popstate"));
+    expect(fires).toBe(1);
+  });
+
+  it("dispose removes popstate permanently", () => {
+    const h = createBrowserHistory();
+    let fires = 0;
+    h.listen(() => {
+      fires++;
+    });
+    h.dispose?.();
+    window.dispatchEvent(new PopStateEvent("popstate"));
+    expect(fires).toBe(0);
   });
 });

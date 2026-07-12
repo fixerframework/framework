@@ -25,10 +25,12 @@ export function createMemoryHistory(options?: {
   });
   let index = entries.length - 1;
   const listeners = new Set<(loc: HistoryLocation) => void>();
+  let disposed = false;
 
   const current = (): HistoryLocation => cloneLoc(entries[index]!);
 
   const notify = () => {
+    if (disposed) return;
     const loc = current();
     for (const l of listeners) l(loc);
   };
@@ -38,32 +40,42 @@ export function createMemoryHistory(options?: {
       return current();
     },
     push(to) {
+      if (disposed) return;
       entries.splice(index + 1);
       entries.push(cloneLoc(to));
       index = entries.length - 1;
       notify();
     },
     replace(to) {
+      if (disposed) return;
       entries[index] = cloneLoc(to);
       notify();
     },
     back() {
+      if (disposed) return;
       if (index > 0) {
         index -= 1;
         notify();
       }
     },
     listen(listener) {
+      if (disposed) return () => {};
       listeners.add(listener);
       return () => {
         listeners.delete(listener);
       };
+    },
+    dispose() {
+      disposed = true;
+      listeners.clear();
     },
   };
 }
 
 export function createBrowserHistory(_options?: { base?: string }): HistoryAdapter {
   const listeners = new Set<(loc: HistoryLocation) => void>();
+  let disposed = false;
+  let attached = false;
 
   const read = (): HistoryLocation => {
     return {
@@ -75,13 +87,22 @@ export function createBrowserHistory(_options?: { base?: string }): HistoryAdapt
   };
 
   const onPop = () => {
+    if (disposed) return;
     const loc = read();
     for (const l of listeners) l(loc);
   };
 
-  if (typeof window !== "undefined") {
+  const attach = () => {
+    if (attached || disposed || typeof window === "undefined") return;
     window.addEventListener("popstate", onPop);
-  }
+    attached = true;
+  };
+
+  const detach = () => {
+    if (!attached || typeof window === "undefined") return;
+    window.removeEventListener("popstate", onPop);
+    attached = false;
+  };
 
   return {
     get location() {
@@ -90,23 +111,35 @@ export function createBrowserHistory(_options?: { base?: string }): HistoryAdapt
         : { pathname: "/", search: "", hash: "", state: null };
     },
     push(to) {
+      if (disposed) return;
       const url = locationToPath(to);
       window.history.pushState(to.state ?? null, "", url);
       for (const l of listeners) l(cloneLoc(to));
     },
     replace(to) {
+      if (disposed) return;
       const url = locationToPath(to);
       window.history.replaceState(to.state ?? null, "", url);
       for (const l of listeners) l(cloneLoc(to));
     },
     back() {
+      if (disposed) return;
       window.history.back();
     },
     listen(listener) {
+      if (disposed) return () => {};
       listeners.add(listener);
+      attach();
       return () => {
         listeners.delete(listener);
+        if (listeners.size === 0) detach();
       };
+    },
+    dispose() {
+      if (disposed) return;
+      disposed = true;
+      listeners.clear();
+      detach();
     },
   };
 }

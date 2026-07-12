@@ -32,10 +32,7 @@ export function deferred<T = void>() {
 }
 
 /** Wait until router status is ready or error (with timeout). */
-export async function waitFor(
-  predicate: () => boolean,
-  timeoutMs = 1000,
-): Promise<void> {
+export async function waitFor(predicate: () => boolean, timeoutMs = 1000): Promise<void> {
   const start = Date.now();
   while (!predicate()) {
     if (Date.now() - start > timeoutMs) {
