@@ -41,4 +41,34 @@ describe("Link", () => {
     await waitFor(() => router.location.value.pathname === "/b");
     expect(router.matches.value.map((m) => m.id)).toContain("b");
   });
+
+  it("prefixes href with base for progressive enhancement", async () => {
+    function Page() {
+      return <Link href="/about">About</Link>;
+    }
+    const routes: RouteDef[] = [
+      {
+        path: "/",
+        id: "root",
+        component: Page,
+        children: [
+          { index: true, path: "", id: "home" },
+          { path: "about", id: "about" },
+        ],
+      },
+    ];
+    const router = createRouter({
+      routes,
+      history: "memory",
+      initialPath: "/",
+      base: "/app",
+    });
+    el = mount(<Router router={router} />);
+    await waitFor(() => router.status.value === "ready");
+    expect(el!.querySelector("a")?.getAttribute("href")).toBe("/app/about");
+
+    el!.querySelector("a")!.click();
+    await waitFor(() => router.location.value.pathname === "/about");
+    expect(router.__history.location.pathname).toBe("/app/about");
+  });
 });

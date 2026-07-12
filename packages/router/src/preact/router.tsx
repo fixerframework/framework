@@ -15,6 +15,10 @@ export interface RouterProps {
  * Provides router context, starts history listening, and renders the matched route tree.
  * Optional `children` render alongside / instead of automatic tree — typically omit children
  * and define components on route defs.
+ *
+ * `fallback` is for the initial/empty loading state only. On `status === "error"`, this
+ * component still renders the matched tree (after a failed load commits location); branch
+ * with `useNavigation()` in layouts or leaves for error UI.
  */
 export function Router({ router, fallback = null, children }: RouterProps) {
   const [ready, setReady] = useState(false);

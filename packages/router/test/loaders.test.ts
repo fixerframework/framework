@@ -114,7 +114,9 @@ describe("loaders", () => {
     router.navigate("/slow");
     await waitFor(() => router.status.value === "loading");
     router.navigate("/fast");
-    await waitFor(() => router.status.value === "ready" && router.location.value.pathname === "/fast");
+    await waitFor(
+      () => router.status.value === "ready" && router.location.value.pathname === "/fast",
+    );
 
     expect(aborted).toBe(true);
     expect(router.getLoaderData("fast")).toBe("fast");
@@ -149,7 +151,9 @@ describe("loaders", () => {
       initialPath: "/old",
     });
     const stop = router.start();
-    await waitFor(() => router.location.value.pathname === "/new" && router.status.value === "ready");
+    await waitFor(
+      () => router.location.value.pathname === "/new" && router.status.value === "ready",
+    );
     expect(router.matches.value.map((m) => m.id)).toContain("new");
     stop();
   });
@@ -189,12 +193,14 @@ describe("loaders", () => {
     stop();
   });
 
-  it("surfaces loader errors", async () => {
+  it("surfaces loader errors and commits target location", async () => {
     const routes: RouteDef[] = [
       {
         path: "/",
         id: "root",
+        loader: async () => ({ root: true }),
         children: [
+          { index: true, path: "", id: "home" },
           {
             path: "boom",
             id: "boom",
@@ -209,11 +215,97 @@ describe("loaders", () => {
     const router = createRouter({
       routes,
       history: "memory",
-      initialPath: "/boom",
+      initialPath: "/",
     });
     const stop = router.start();
+    await waitFor(() => router.status.value === "ready");
+
+    router.navigate("/boom");
     await waitFor(() => router.status.value === "error");
     expect(String(router.error.value)).toMatch(/kaboom/);
+    expect(router.location.value.pathname).toBe("/boom");
+    expect(router.__history.location.pathname).toBe("/boom");
+    expect(router.matches.value.map((m) => m.id)).toEqual(["root", "boom"]);
+    // Ancestor loader data retained
+    expect(router.getLoaderData("root")).toEqual({ root: true });
+    stop();
+  });
+
+  it("runs beforeLoad on every navigation even when loader is reused", async () => {
+    let before = 0;
+    let rootLoads = 0;
+    const routes: RouteDef[] = [
+      {
+        path: "/",
+        id: "root",
+        beforeLoad: async () => {
+          before++;
+        },
+        loader: async () => {
+          rootLoads++;
+          return { root: rootLoads };
+        },
+        children: [
+          { path: "a", id: "a" },
+          { path: "b", id: "b" },
+        ],
+      },
+    ];
+
+    const router = createRouter({
+      routes,
+      history: "memory",
+      initialPath: "/a",
+    });
+    const stop = router.start();
+    await waitFor(() => router.status.value === "ready");
+    expect(before).toBe(1);
+    expect(rootLoads).toBe(1);
+
+    router.navigate("/b");
+    await waitFor(() => router.location.value.pathname === "/b" && router.status.value === "ready");
+    expect(before).toBe(2);
+    expect(rootLoads).toBe(1);
+    stop();
+  });
+
+  it("re-runs loaders when search string changes", async () => {
+    let loads = 0;
+    const routes: RouteDef[] = [
+      {
+        path: "/",
+        id: "root",
+        children: [
+          {
+            path: "q",
+            id: "q",
+            loader: async ({ search }) => {
+              loads++;
+              return { search, n: loads };
+            },
+          },
+        ],
+      },
+    ];
+
+    const router = createRouter({
+      routes,
+      history: "memory",
+      initialPath: "/q?x=1",
+    });
+    const stop = router.start();
+    await waitFor(() => router.status.value === "ready");
+    expect(loads).toBe(1);
+    expect(router.getLoaderData("q")).toEqual({ search: "?x=1", n: 1 });
+
+    router.navigate("/q?x=2");
+    await waitFor(() => router.status.value === "ready" && loads === 2);
+    expect(router.getLoaderData("q")).toEqual({ search: "?x=2", n: 2 });
+
+    router.navigate("/q?x=2");
+    await waitFor(() => router.status.value === "ready");
+    // Same URL no-op — no extra load
+    expect(loads).toBe(2);
     stop();
   });
 });
