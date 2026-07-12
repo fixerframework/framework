@@ -1,6 +1,6 @@
 import type { ComponentChildren, JSX } from "preact";
 import { createContext } from "preact";
-import { useContext, useEffect, useRef } from "preact/hooks";
+import { useContext, useEffect, useRef, useState } from "preact/hooks";
 import { AnimatePresence, motion } from "@fixerframework/animation";
 import { Portal } from "../a11y/portal.tsx";
 import { trapFocus } from "../a11y/focus-trap.ts";
@@ -14,6 +14,8 @@ interface DialogCtx {
   setOpen: (v: boolean) => void;
   titleId: string;
   descriptionId: string;
+  setHasDescription: (v: boolean) => void;
+  hasDescription: boolean;
 }
 
 const DialogContext = createContext<DialogCtx | null>(null);
@@ -35,6 +37,7 @@ function Root({ open, defaultOpen, onOpenChange, children }: DialogRootProps) {
   const state = useOpenState({ open, defaultOpen, onOpenChange });
   const titleId = useId("dialog-title");
   const descriptionId = useId("dialog-desc");
+  const [hasDescription, setHasDescription] = useState(false);
 
   return (
     <DialogContext.Provider
@@ -43,6 +46,8 @@ function Root({ open, defaultOpen, onOpenChange, children }: DialogRootProps) {
         setOpen: state.setOpen,
         titleId,
         descriptionId,
+        hasDescription,
+        setHasDescription,
       }}
     >
       {children}
@@ -75,7 +80,7 @@ export interface DialogContentProps extends JSX.HTMLAttributes<HTMLDivElement> {
 }
 
 function Content({ className, children, ...props }: DialogContentProps) {
-  const { open, setOpen, titleId, descriptionId } = useDialogCtx();
+  const { open, setOpen, titleId, descriptionId, hasDescription } = useDialogCtx();
   const panelRef = useRef<HTMLDivElement>(null);
 
   useDismiss({
@@ -121,7 +126,7 @@ function Content({ className, children, ...props }: DialogContentProps) {
               role="dialog"
               aria-modal="true"
               aria-labelledby={titleId}
-              aria-describedby={descriptionId}
+              aria-describedby={hasDescription ? descriptionId : undefined}
               tabIndex={-1}
               initial={{ opacity: 0, scale: 0.96, y: 8 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -172,7 +177,12 @@ function Description({
   children,
   ...props
 }: JSX.HTMLAttributes<HTMLParagraphElement> & { children?: ComponentChildren }) {
-  const { descriptionId } = useDialogCtx();
+  const { descriptionId, setHasDescription } = useDialogCtx();
+  useEffect(() => {
+    setHasDescription(true);
+    return () => setHasDescription(false);
+  }, [setHasDescription]);
+
   return (
     <p id={descriptionId} className={cn("text-sm text-muted-foreground", className)} {...props}>
       {children}

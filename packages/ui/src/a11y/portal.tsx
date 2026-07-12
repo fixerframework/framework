@@ -14,5 +14,5 @@ export interface PortalProps {
 export function Portal({ children, container }: PortalProps) {
   if (typeof document === "undefined") return null;
   const mount = container ?? document.body;
-  return createPortal(children as VNode, mount);
+  return createPortal(<div data-ff-portal="">{children as VNode}</div>, mount);
 }

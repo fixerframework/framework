@@ -1,6 +1,6 @@
 import type { Signal } from "@preact/signals-core";
 import { signal } from "@preact/signals-core";
-import { useLayoutEffect, useMemo, useReducer } from "preact/hooks";
+import { useCallback, useLayoutEffect, useMemo, useReducer, useRef } from "preact/hooks";
 
 export type MaybeSignal<T> = T | Signal<T>;
 
@@ -23,6 +23,7 @@ export function readMaybeSignal<T>(v: MaybeSignal<T>): T {
 /**
  * Resolve open state for overlays: controlled boolean, Signal, or internal signal.
  * Subscribes so the host component re-renders on signal changes.
+ * `setOpen` is stable across renders (useCallback).
  */
 export function useOpenState(opts: {
   open?: MaybeSignal<boolean>;
@@ -35,12 +36,13 @@ export function useOpenState(opts: {
   const internal = useMemo(() => signal(opts.defaultOpen ?? false), []);
   const externalSignal =
     opts.open !== undefined && isSignal(opts.open) ? (opts.open as Signal<boolean>) : null;
+  const onOpenChangeRef = useRef(opts.onOpenChange);
+  onOpenChangeRef.current = opts.onOpenChange;
   const [, rerender] = useReducer((n: number) => n + 1, 0);
 
   useLayoutEffect(() => {
     if (opts.open !== undefined && !isSignal(opts.open)) {
       // controlled boolean — parent re-render supplies new open
-      rerender(0);
       return;
     }
     const sig = externalSignal ?? internal;
@@ -56,19 +58,22 @@ export function useOpenState(opts: {
         ? externalSignal.value
         : (opts.open as boolean);
 
-  const setOpen = (next: boolean) => {
-    if (opts.open !== undefined && !isSignal(opts.open)) {
-      opts.onOpenChange?.(next);
-      return;
-    }
-    if (externalSignal) {
-      externalSignal.value = next;
-    } else {
-      internal.value = next;
-    }
-    opts.onOpenChange?.(next);
-    rerender(0);
-  };
+  const setOpen = useCallback(
+    (next: boolean) => {
+      if (opts.open !== undefined && !isSignal(opts.open)) {
+        onOpenChangeRef.current?.(next);
+        return;
+      }
+      if (externalSignal) {
+        externalSignal.value = next;
+      } else {
+        internal.value = next;
+      }
+      onOpenChangeRef.current?.(next);
+      rerender(0);
+    },
+    [opts.open, externalSignal, internal],
+  );
 
   return { open, setOpen };
 }
