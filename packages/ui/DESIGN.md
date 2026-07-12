@@ -4,14 +4,14 @@
 
 ## Layers
 
-| Layer      | Path                   | Role                                                                                    |
-| ---------- | ---------------------- | --------------------------------------------------------------------------------------- |
-| Utils      | `src/lib/`             | `cn()`, signal helpers                                                                  |
-| Theme      | `src/styles/theme.css` | CSS variables (light + `.dark`)                                                         |
-| A11y       | `src/a11y/`            | Portal (`preact/compat` createPortal for context), focus trap, dismiss, roving tabindex |
-| Primitives | `src/primitives/`      | Styled Preact components                                                                |
-| State      | `src/state/`           | `Show`, `Await`, `bind`, `Match`                                                        |
-| Motion     | via `@fixerframework/animation` | Enter/exit for overlays (`Dialog` uses `AnimatePresence` + `motion`)           |
+| Layer      | Path                            | Role                                                                                    |
+| ---------- | ------------------------------- | --------------------------------------------------------------------------------------- |
+| Utils      | `src/lib/`                      | `cn()`, signal helpers                                                                  |
+| Theme      | `src/styles/theme.css`          | CSS variables (light + `.dark`)                                                         |
+| A11y       | `src/a11y/`                     | Portal (`preact/compat` createPortal for context), focus trap, dismiss, roving tabindex |
+| Primitives | `src/primitives/`               | Styled Preact components                                                                |
+| State      | `src/state/`                    | `Show`, `Await`, `bind`, `Match`                                                        |
+| Motion     | via `@fixerframework/animation` | Enter/exit for overlays (`Dialog` uses `AnimatePresence` + `motion`)                    |
 
 **Dependency direction:** `ui` → `state` → `auth`; `ui` → `animation`. No cycles.
 
@@ -26,10 +26,18 @@
 
 - **`Show`** — truthy gate on a signal/value
 - **`Await`** — branch on `Query` status/data
-- **`bind` / `bindChecked`** — two-way form binding to signals
+- **`useBound` / `useBoundChecked`** — subscribing two-way form binding (production)
+- **`bind` / `bindChecked`** — non-subscribing prop factories (parent must re-render)
 - **`Match`** — discriminant render on status-like signals
 
 State bridges subscribe via `useSignalValue` / `useOpenState` (signals-core `subscribe`) so components re-render without a Babel signals transform.
+
+## Overlay a11y baseline
+
+- **Dialog** — `aria-labelledby`; `aria-describedby` only when `Description` mounts
+- **Popover** — portaled + positioned to trigger (`position: fixed` + clamp)
+- **Select** — combobox/listbox keyboard navigation; item labels for display
+- **Tabs** — registration + `aria-controls` / panel ids; roving tabindex
 
 ## Non-goals (v1)
 

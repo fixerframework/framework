@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "description": "Preact UI primitives and state bridges for FixerFramework",
   "license": "MIT",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "type": "module",
   "sideEffects": [
     "./dist/theme.css"
@@ -16,19 +20,15 @@
     },
     "./theme.css": "./dist/theme.css"
   },
-  "files": [
-    "dist",
-    "README.md"
-  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.fixerframework.com"
+  },
   "scripts": {
     "build": "fixer-bundle --mode lib --no-format --no-lint --no-typecheck --no-test",
     "check": "fixer-bundle --mode lib --no-build",
     "test": "vitest run",
     "prepublishOnly": "bun run build"
-  },
-  "publishConfig": {
-    "registry": "https://registry.fixerframework.com",
-    "access": "public"
   },
   "dependencies": {
     "@fixerframework/animation": "workspace:*",
