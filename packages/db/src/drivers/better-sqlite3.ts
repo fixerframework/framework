@@ -1,23 +1,8 @@
 import type { CompiledQuery, Driver, DriverTx, QueryResult } from "../core/types.ts";
 import { DbError } from "../core/errors.ts";
 import { importPeer } from "../internal/assert-peer.ts";
-
-export interface SqliteConfig {
-  path?: string;
-  /** Existing better-sqlite3 Database instance. */
-  database?: BetterSqliteDatabase;
-  readonly?: boolean;
-  closeOnDisconnect?: boolean;
-}
-
-export interface BetterSqliteDatabase {
-  prepare(sql: string): {
-    all: (...params: unknown[]) => unknown[];
-    run: (...params: unknown[]) => { changes: number };
-  };
-  exec(sql: string): void;
-  close(): void;
-}
+import type { SqliteConfig, BetterSqliteDatabase } from "@fixerframework/types/db/drivers";
+export type { SqliteConfig, BetterSqliteDatabase };
 
 type BetterSqliteModule = {
   default: new (

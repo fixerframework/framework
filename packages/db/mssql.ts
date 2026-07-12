@@ -1,1 +1,1 @@
-export { mssql, type MssqlConfig, type MssqlPoolLike } from "./src/drivers/mssql.ts";
+export { mssql } from "./src/drivers/mssql.ts";

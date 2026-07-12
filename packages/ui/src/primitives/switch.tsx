@@ -1,8 +1,8 @@
-import type { JSX } from "preact";
 import { useState } from "preact/hooks";
+import type { SwitchProps } from "@fixerframework/types/ui";
 import { cn } from "../lib/cn.ts";
 
-export interface SwitchProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, "type"> {}
+export type { SwitchProps };
 
 /** Accessible switch built on checkbox semantics + styling. */
 export function Switch({

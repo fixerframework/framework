@@ -1,5 +1,1 @@
-export {
-  sqlite,
-  type SqliteConfig,
-  type BetterSqliteDatabase,
-} from "./src/drivers/better-sqlite3.ts";
+export { sqlite } from "./src/drivers/better-sqlite3.ts";

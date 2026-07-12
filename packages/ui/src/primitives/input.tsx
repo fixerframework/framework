@@ -1,7 +1,7 @@
-import type { JSX } from "preact";
+import type { InputProps } from "@fixerframework/types/ui";
 import { cn } from "../lib/cn.ts";
 
-export interface InputProps extends JSX.InputHTMLAttributes<HTMLInputElement> {}
+export type { InputProps };
 
 export function Input({ className, type = "text", ...props }: InputProps) {
   return (

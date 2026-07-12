@@ -1,25 +1,5 @@
-import type { RateLimiter } from "./rate-limit.ts";
-import type { ExtractOptions, SessionClaims, VerifyOptions } from "./token.ts";
+import type { ProtectOptions, ProtectResult } from "@fixerframework/types/auth/server";
 import { extractSessionToken, verifySessionToken } from "./token.ts";
-
-export interface ProtectOptions {
-  /** Token verification options forwarded to {@link verifySessionToken}. */
-  verify: VerifyOptions & ExtractOptions;
-  /** Base Clerk sign-in URL redirected to when unauthenticated. */
-  signInUrl: string;
-  /** Rate limiter; when omitted, protection runs without throttling. */
-  rateLimiter?: RateLimiter;
-  /** Derives the rate-limit key from the request. Defaults to client IP. */
-  keyGenerator?: (request: Request) => string;
-  /** Where to return after sign-in. Defaults to the incoming request URL. */
-  redirectUrl?: string | ((request: Request) => string);
-}
-
-export type ProtectResult =
-  | { status: "authenticated"; userId: string; claims: SessionClaims }
-  | { status: "redirect"; response: Response }
-  | { status: "unauthenticated"; response: Response }
-  | { status: "rate_limited"; response: Response };
 
 /**
  * Default rate-limit key: the originating client IP from common proxy headers,

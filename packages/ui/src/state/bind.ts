@@ -1,16 +1,8 @@
 import type { Signal } from "@preact/signals-core";
-import type { JSX } from "preact";
+import type { BindCheckboxProps, BindTextProps } from "@fixerframework/types/ui";
 import { useSignalValue } from "../lib/use-signal-value.ts";
 
-export interface BindTextProps {
-  value: string;
-  onInput: JSX.InputEventHandler<HTMLInputElement | HTMLTextAreaElement>;
-}
-
-export interface BindCheckboxProps {
-  checked: boolean;
-  onChange: JSX.GenericEventHandler<HTMLInputElement>;
-}
+export type { BindCheckboxProps, BindTextProps };
 
 /**
  * Two-way bind a string signal to Input/Textarea (prop factory).

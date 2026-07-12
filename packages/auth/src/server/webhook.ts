@@ -1,32 +1,12 @@
 import { verifyWebhook } from "@clerk/backend/webhooks";
 import type { WebhookEvent, WebhookEventType } from "@clerk/backend";
-import type { RateLimiter } from "./rate-limit.ts";
+import type {
+  Awaitable,
+  WebhookConfig,
+  WebhookHandler,
+  WebhookRouter,
+} from "@fixerframework/types/auth/server";
 import { defaultKeyGenerator } from "./protect.ts";
-
-type Awaitable<T> = T | Promise<T>;
-/**
- * Verified webhook handler. Receives the full {@link WebhookEvent} union;
- * narrow `event.type` inside to access the type-specific `data` payload.
- * (Clerk's `WebhookEvent` bundles some event types into single union members,
- * so a per-literal `Extract` is not sound.)
- */
-export type WebhookHandler = (event: WebhookEvent) => Awaitable<void>;
-
-export interface WebhookConfig {
-  /** Clerk webhook signing secret (or set CLERK_WEBHOOK_SIGNING_SECRET). */
-  signingSecret?: string;
-  /** Rate limiter for incoming webhook deliveries. */
-  rateLimiter?: RateLimiter;
-  /** Derives the rate-limit key from the request. Defaults to client IP. */
-  keyGenerator?: (request: Request) => string;
-}
-
-export interface WebhookRouter {
-  /** Register a handler for a specific Clerk event type (`user.created`, …). */
-  on<E extends WebhookEventType>(type: E, handler: WebhookHandler): void;
-  /** Verify + dispatch a webhook request. Returns a ready Response. */
-  handle(request: Request): Promise<Response>;
-}
 
 /**
  * Typed Clerk webhook router. Wraps `@clerk/backend`'s `verifyWebhook` so

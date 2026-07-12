@@ -11,6 +11,7 @@
  *   useParams,
  *   redirect,
  * } from '@fixerframework/router'
+ * import type { RouteDef, RouterRuntime } from '@fixerframework/types/router'
  *
  * const router = createRouter({
  *   history: 'browser',
@@ -48,20 +49,9 @@
 
 export { createRouter } from "./src/core/create-router.ts";
 export { redirect, Redirect, isRedirect } from "./src/core/types.ts";
-export type {
-  RouteDef,
-  RouterRuntime,
-  CreateRouterOptions,
-  LoaderContext,
-  LocationState,
-  NavigateOptions,
-  NavigationStatus,
-  RouteMatch,
-  HistoryKind,
-} from "./src/core/types.ts";
 
-export { Router, type RouterProps } from "./src/preact/router.tsx";
-export { Link, type LinkProps } from "./src/preact/link.tsx";
+export { Router } from "./src/preact/router.tsx";
+export { Link } from "./src/preact/link.tsx";
 export { Outlet } from "./src/preact/outlet.tsx";
 export {
   useRouter,

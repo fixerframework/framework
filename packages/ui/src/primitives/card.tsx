@@ -1,9 +1,8 @@
 import type { ComponentChildren, JSX } from "preact";
+import type { CardProps } from "@fixerframework/types/ui";
 import { cn } from "../lib/cn.ts";
 
-export interface CardProps extends JSX.HTMLAttributes<HTMLDivElement> {
-  children?: ComponentChildren;
-}
+export type { CardProps };
 
 export function Card({ className, children, ...props }: CardProps) {
   return (

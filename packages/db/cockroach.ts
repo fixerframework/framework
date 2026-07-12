@@ -1,1 +1,1 @@
-export { cockroach, type CockroachConfig } from "./src/drivers/cockroach.ts";
+export { cockroach } from "./src/drivers/cockroach.ts";

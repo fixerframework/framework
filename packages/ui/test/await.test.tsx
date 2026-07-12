@@ -1,5 +1,5 @@
 import { signal } from "@preact/signals-core";
-import type { Query, QueryStatus } from "@fixerframework/state";
+import type { Query, QueryStatus } from "@fixerframework/types/state";
 import { afterEach, describe, expect, it } from "vitest";
 import { Await } from "../src/state/await.tsx";
 import { cleanup, flush, mount } from "./helpers.ts";

@@ -28,6 +28,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@fixerframework/types": "workspace:*",
     "@fixerframework/utils": "workspace:*",
     "@preact/signals-core": "catalog:preact"
   },

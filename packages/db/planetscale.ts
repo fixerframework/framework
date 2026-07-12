@@ -1,5 +1,1 @@
-export {
-  planetscale,
-  type PlanetscaleConfig,
-  type PlanetscaleConnection,
-} from "./src/drivers/planetscale.ts";
+export { planetscale } from "./src/drivers/planetscale.ts";

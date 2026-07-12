@@ -1,25 +1,8 @@
 import type { CompiledQuery, DialectId, Driver, DriverTx, QueryResult } from "../core/types.ts";
 import { DbError } from "../core/errors.ts";
 import { importPeer } from "../internal/assert-peer.ts";
-
-export interface RdsDataConfig {
-  resourceArn: string;
-  secretArn: string;
-  database?: string;
-  /** Engine family for placeholder compilation. */
-  dialect?: "postgres" | "mysql";
-  region?: string;
-  client?: RdsDataClientLike;
-}
-
-export interface RdsDataClientLike {
-  send: (command: unknown) => Promise<{
-    records?: unknown[][];
-    columnMetadata?: { name?: string }[];
-    numberOfRecordsUpdated?: number;
-    formattedRecords?: string;
-  }>;
-}
+import type { RdsDataConfig, RdsDataClientLike } from "@fixerframework/types/db/drivers";
+export type { RdsDataConfig, RdsDataClientLike };
 
 type AwsModule = {
   RDSDataClient: new (config: object) => RdsDataClientLike;

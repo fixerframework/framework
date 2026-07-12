@@ -1,5 +1,6 @@
-import type { RedirectRule } from "../types.ts";
-import type { CloudflarePagesOptions } from "./options.ts";
+import type { CloudflarePagesOptions, RoutesJson } from "@fixerframework/types/adapters";
+
+export type { RoutesJson };
 
 /**
  * Default `_routes.json` exclude patterns.
@@ -106,12 +107,6 @@ export function generateHeaders(options: CloudflarePagesOptions): string {
   return lines.length > 0 ? `${lines.join("\n")}\n` : "";
 }
 
-/** Shape of the `_routes.json` file. */
-export interface RoutesJson {
-  version: 1;
-  include: string[];
-  exclude: string[];
-}
 
 /**
  * Generate the `_routes.json` content for server mode.

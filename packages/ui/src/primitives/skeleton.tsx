@@ -1,7 +1,7 @@
-import type { JSX } from "preact";
+import type { SkeletonProps } from "@fixerframework/types/ui";
 import { cn } from "../lib/cn.ts";
 
-export interface SkeletonProps extends JSX.HTMLAttributes<HTMLDivElement> {}
+export type { SkeletonProps };
 
 export function Skeleton({ className, ...props }: SkeletonProps) {
   return (

@@ -5,17 +5,7 @@
  * expiry checks and claim reads, never for trust decisions.
  */
 
-/** Standard JWT claims plus any custom keys. */
-export interface JwtPayload {
-  iss?: string;
-  sub?: string;
-  aud?: string | string[];
-  exp?: number;
-  nbf?: number;
-  iat?: number;
-  jti?: string;
-  [key: string]: unknown;
-}
+import type { JwtPayload } from "@fixerframework/types/utils";
 
 /** Base64url-encode a string or byte array (no padding). */
 export function base64urlEncode(data: string | Uint8Array): string {

@@ -2,7 +2,10 @@ import type { ComponentChildren, JSX } from "preact";
 import { createContext } from "preact";
 import { useCallback, useContext, useEffect, useId, useRef, useState } from "preact/hooks";
 import { useDismiss } from "../a11y/use-dismiss.ts";
+import type { SelectRootProps } from "@fixerframework/types/ui";
 import { cn } from "../lib/cn.ts";
+
+export type { SelectRootProps };
 
 interface SelectItem {
   value: string;
@@ -28,13 +31,6 @@ function useSelectCtx(): SelectCtx {
   const ctx = useContext(SelectContext);
   if (!ctx) throw new Error("Select components must be used within Select.Root");
   return ctx;
-}
-
-export interface SelectRootProps {
-  value?: string;
-  defaultValue?: string;
-  onValueChange?: (value: string) => void;
-  children?: ComponentChildren;
 }
 
 function Root({ value: controlled, defaultValue, onValueChange, children }: SelectRootProps) {

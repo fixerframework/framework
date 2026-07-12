@@ -1,1 +1,1 @@
-export { libsql, type LibsqlConfig, type LibsqlClient } from "./src/drivers/libsql.ts";
+export { libsql } from "./src/drivers/libsql.ts";

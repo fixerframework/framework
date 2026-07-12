@@ -98,6 +98,9 @@
     "mssql": { "optional": true },
     "@aws-sdk/client-rds-data": { "optional": true }
   },
+  "dependencies": {
+    "@fixerframework/types": "workspace:*"
+  },
   "devDependencies": {
     "@fixerframework/bundler": "workspace:*",
     "@types/bun": "catalog:types",

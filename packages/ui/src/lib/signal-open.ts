@@ -1,8 +1,9 @@
 import type { Signal } from "@preact/signals-core";
 import { signal } from "@preact/signals-core";
 import { useCallback, useLayoutEffect, useMemo, useReducer, useRef } from "preact/hooks";
+import type { MaybeSignal } from "@fixerframework/types/ui";
 
-export type MaybeSignal<T> = T | Signal<T>;
+export type { MaybeSignal };
 
 /** True for preact signals-core Signal instances. */
 export function isSignal<T>(v: unknown): v is Signal<T> {

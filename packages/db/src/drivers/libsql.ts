@@ -1,23 +1,8 @@
 import type { CompiledQuery, Driver, DriverTx, QueryResult } from "../core/types.ts";
 import { DbError } from "../core/errors.ts";
 import { importPeer } from "../internal/assert-peer.ts";
-
-export interface LibsqlConfig {
-  url: string;
-  authToken?: string;
-  client?: LibsqlClient;
-}
-
-export interface LibsqlClient {
-  execute: (stmt: {
-    sql: string;
-    args?: unknown[];
-  }) => Promise<{ rows: unknown[]; rowsAffected?: number }>;
-  batch?: (
-    stmts: { sql: string; args?: unknown[] }[],
-  ) => Promise<{ rows: unknown[]; rowsAffected?: number }[]>;
-  close?: () => void;
-}
+import type { LibsqlConfig, LibsqlClient } from "@fixerframework/types/db/drivers";
+export type { LibsqlConfig, LibsqlClient };
 
 type LibsqlModule = {
   createClient: (config: { url: string; authToken?: string }) => LibsqlClient;

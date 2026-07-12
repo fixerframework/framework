@@ -1,6 +1,6 @@
 /**
  * Topological build of @fixerframework/* packages (dist-only exports).
- * Order: bundler → utils → independents → state → ui
+ * Order: bundler → types → utils → independents → state → ui
  */
 import { spawnSync } from "node:child_process";
 import { join } from "node:path";
@@ -9,6 +9,7 @@ const root = join(import.meta.dirname, "..");
 
 const stages: string[][] = [
   ["@fixerframework/bundler"],
+  ["@fixerframework/types"],
   ["@fixerframework/utils"],
   [
     "@fixerframework/animation",

@@ -1,16 +1,8 @@
-import type { ReadonlySignal, Signal } from "@preact/signals-core";
 import type { ComponentChildren } from "preact";
+import type { MatchProps } from "@fixerframework/types/ui";
 import { useSignalValue } from "../lib/use-signal-value.ts";
 
-export type MatchValue<T extends string | number | symbol> = T | Signal<T> | ReadonlySignal<T>;
-
-export interface MatchProps<T extends string | number | symbol> {
-  value: MatchValue<T>;
-  children: Partial<Record<T, ComponentChildren | (() => ComponentChildren)>> & {
-    /** Fallback when no case matches. */
-    _?: ComponentChildren | (() => ComponentChildren);
-  };
-}
+export type { MatchProps, MatchValue } from "@fixerframework/types/ui";
 
 function renderSlot(
   slot: ComponentChildren | (() => ComponentChildren) | undefined,

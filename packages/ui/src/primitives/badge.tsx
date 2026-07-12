@@ -1,6 +1,8 @@
-import { cva, type VariantProps } from "class-variance-authority";
-import type { ComponentChildren, JSX } from "preact";
+import { cva } from "class-variance-authority";
+import type { BadgeProps } from "@fixerframework/types/ui";
 import { cn } from "../lib/cn.ts";
+
+export type { BadgeProps };
 
 export const badgeVariants = cva(
   "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring",
@@ -18,11 +20,6 @@ export const badgeVariants = cva(
     },
   },
 );
-
-export interface BadgeProps
-  extends JSX.HTMLAttributes<HTMLDivElement>, VariantProps<typeof badgeVariants> {
-  children?: ComponentChildren;
-}
 
 export function Badge({ className, variant, children, ...props }: BadgeProps) {
   return (

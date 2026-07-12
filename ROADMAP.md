@@ -19,6 +19,7 @@
 Ship a coherent core that apps can depend on without platform magic.
 
 - [x] Monorepo workspace (`packages/*`, Bun catalogs)
+- [x] `@fixerframework/types` — shared public TypeScript types for all packages
 - [x] `@fixerframework/auth` — Clerk + `@auth/core` server runtime (rate limiting, route guard, redirect-loop flow, webhook router, encrypted app sessions) + client signals bridge
 - [x] `@fixerframework/state` — atoms, derive, query cache, mutations, auth scope
 - [x] `@fixerframework/ui` — Preact primitives, theme, state bridges (`Show`, `Await`, `Match`, `bind`)

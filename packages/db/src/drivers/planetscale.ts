@@ -1,22 +1,8 @@
 import type { CompiledQuery, Driver, DriverTx, QueryResult } from "../core/types.ts";
 import { DbError } from "../core/errors.ts";
 import { importPeer } from "../internal/assert-peer.ts";
-
-export interface PlanetscaleConfig {
-  host?: string;
-  username?: string;
-  password?: string;
-  url?: string;
-  connection?: PlanetscaleConnection;
-}
-
-export interface PlanetscaleConnection {
-  execute: (
-    query: string,
-    args?: unknown[],
-  ) => Promise<{ rows: unknown[]; rowsAffected?: number }>;
-  transaction?: <T>(fn: (tx: PlanetscaleConnection) => Promise<T>) => Promise<T>;
-}
+import type { PlanetscaleConfig, PlanetscaleConnection } from "@fixerframework/types/db/drivers";
+export type { PlanetscaleConfig, PlanetscaleConnection };
 
 type PlanetscaleModule = {
   connect: (config: object) => PlanetscaleConnection;

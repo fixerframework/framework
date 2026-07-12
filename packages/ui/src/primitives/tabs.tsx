@@ -3,7 +3,10 @@ import { createContext } from "preact";
 import { useContext, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
 import { useId } from "../a11y/use-id.ts";
 import { useRoving } from "../a11y/use-roving.ts";
+import type { TabsRootProps } from "@fixerframework/types/ui";
 import { cn } from "../lib/cn.ts";
+
+export type { TabsRootProps };
 
 interface TabsCtx {
   value: string;
@@ -19,14 +22,6 @@ function useTabsCtx(): TabsCtx {
   const ctx = useContext(TabsContext);
   if (!ctx) throw new Error("Tabs components must be used within Tabs.Root");
   return ctx;
-}
-
-export interface TabsRootProps {
-  value?: string;
-  defaultValue?: string;
-  onValueChange?: (value: string) => void;
-  children?: ComponentChildren;
-  className?: string;
 }
 
 function Root({

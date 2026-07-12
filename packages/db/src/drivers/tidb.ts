@@ -1,7 +1,8 @@
 import type { Driver } from "../core/types.ts";
-import { mysql, type MysqlConfig } from "./mysql2.ts";
+import type { TidbConfig } from "@fixerframework/types/db/drivers";
+import { mysql } from "./mysql2.ts";
 
-export type TidbConfig = MysqlConfig;
+export type { TidbConfig };
 
 /**
  * TiDB is MySQL-compatible. Factory is an alias over `mysql` with a tidb quirk tag.

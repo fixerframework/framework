@@ -14,6 +14,7 @@
         "@fixerframework/router": "workspace:*",
         "@fixerframework/bundler": "workspace:*",
         "@fixerframework/utils": "workspace:*",
+        "@fixerframework/types": "workspace:*",
         "@fixerframework/adapters": "workspace:*",
         "@fixerframework/db": "workspace:*"
       },

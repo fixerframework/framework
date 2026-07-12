@@ -2,15 +2,7 @@
  * Cookie serialization and parsing for auth client creation (SSR sessions, CSRF).
  */
 
-export interface CookieOptions {
-  domain?: string;
-  path?: string;
-  maxAge?: number;
-  expires?: Date;
-  secure?: boolean;
-  httpOnly?: boolean;
-  sameSite?: "strict" | "lax" | "none";
-}
+import type { CookieOptions } from "@fixerframework/types/utils";
 
 /** Serialize a name/value pair into a Set-Cookie header value. */
 export function serializeCookie(name: string, value: string, options: CookieOptions = {}): string {

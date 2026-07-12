@@ -1,9 +1,7 @@
-import type { ComponentChildren, JSX } from "preact";
+import type { LabelProps } from "@fixerframework/types/ui";
 import { cn } from "../lib/cn.ts";
 
-export interface LabelProps extends JSX.LabelHTMLAttributes<HTMLLabelElement> {
-  children?: ComponentChildren;
-}
+export type { LabelProps };
 
 export function Label({ className, children, ...props }: LabelProps) {
   return (

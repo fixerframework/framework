@@ -4,7 +4,10 @@ import { useContext, useLayoutEffect, useRef, useState } from "preact/hooks";
 import { Portal } from "../a11y/portal.tsx";
 import { useDismiss } from "../a11y/use-dismiss.ts";
 import { cn } from "../lib/cn.ts";
-import { type MaybeSignal, useOpenState } from "../lib/signal-open.ts";
+import type { PopoverRootProps } from "@fixerframework/types/ui";
+import { useOpenState } from "../lib/signal-open.ts";
+
+export type { PopoverRootProps };
 
 interface PopoverCtx {
   open: boolean;
@@ -18,13 +21,6 @@ function usePopoverCtx(): PopoverCtx {
   const ctx = useContext(PopoverContext);
   if (!ctx) throw new Error("Popover components must be used within Popover.Root");
   return ctx;
-}
-
-export interface PopoverRootProps {
-  open?: MaybeSignal<boolean>;
-  defaultOpen?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  children?: ComponentChildren;
 }
 
 function Root({ open, defaultOpen, onOpenChange, children }: PopoverRootProps) {

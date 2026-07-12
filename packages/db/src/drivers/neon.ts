@@ -1,20 +1,8 @@
 import type { CompiledQuery, Driver, DriverTx, QueryResult } from "../core/types.ts";
 import { DbError } from "../core/errors.ts";
 import { importPeer } from "../internal/assert-peer.ts";
-
-export interface NeonConfig {
-  connectionString: string;
-  /** Existing neon query function. */
-  sql?: NeonSql;
-}
-
-export type NeonSql = ((
-  strings: TemplateStringsArray,
-  ...values: unknown[]
-) => Promise<unknown[]>) & {
-  query?: (text: string, params?: unknown[]) => Promise<{ rows: unknown[] }>;
-  transaction?: <T>(fn: (sql: NeonSql) => Promise<T>) => Promise<T>;
-};
+import type { NeonConfig, NeonSql } from "@fixerframework/types/db/drivers";
+export type { NeonConfig, NeonSql };
 
 type NeonModule = {
   neon: (url: string) => NeonSql;

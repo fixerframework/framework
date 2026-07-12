@@ -28,6 +28,7 @@
     "prepublishOnly": "bun run build"
   },
   "dependencies": {
+    "@fixerframework/types": "workspace:*",
     "@preact/signals-core": "catalog:preact"
   },
   "devDependencies": {
