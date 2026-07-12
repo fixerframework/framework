@@ -1,0 +1,31 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationMap": true,
+    "outDir": "dist",
+    "rootDir": ".",
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
+    "types": []
+  },
+  "include": [
+    "index.ts",
+    "postgres.ts",
+    "neon.ts",
+    "mysql.ts",
+    "planetscale.ts",
+    "sqlite.ts",
+    "bun-sqlite.ts",
+    "libsql.ts",
+    "d1.ts",
+    "mssql.ts",
+    "rds-data.ts",
+    "cockroach.ts",
+    "tidb.ts",
+    "src/**/*.ts"
+  ],
+  "exclude": ["test", "dist", "vitest.config.ts", "vite.config.ts", "**/*.test.ts"]
+}

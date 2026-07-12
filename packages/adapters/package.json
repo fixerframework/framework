@@ -1,7 +1,7 @@
 {
   "name": "@fixerframework/adapters",
   "version": "0.1.0",
-  "description": "Deploy adapters for FixerFramework apps (e.g. Cloudflare Pages)",
+  "description": "Deploy adapters for FixerFramework apps (Cloudflare Pages, Cloudflare Workers)",
   "license": "MIT",
   "type": "module",
   "sideEffects": false,

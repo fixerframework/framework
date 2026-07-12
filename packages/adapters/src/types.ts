@@ -6,7 +6,7 @@ import type { Plugin } from "vite";
 
 /**
  * A deploy adapter integrates the bundler's build with a specific host.
- * The first adapter is Cloudflare Pages; future adapters follow the same shape.
+ * Current adapters: Cloudflare Pages, Cloudflare Workers.
  */
 export interface DeployAdapter {
   /** Adapter name (e.g., "cloudflare-pages"). */

@@ -14,7 +14,8 @@
         "@fixerframework/router": "workspace:*",
         "@fixerframework/bundler": "workspace:*",
         "@fixerframework/utils": "workspace:*",
-        "@fixerframework/adapters": "workspace:*"
+        "@fixerframework/adapters": "workspace:*",
+        "@fixerframework/db": "workspace:*"
       },
       "clerk": {
         "@auth/core": "0.34.3",

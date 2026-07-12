@@ -1,0 +1,106 @@
+{
+  "name": "@fixerframework/db",
+  "version": "0.1.0",
+  "description": "SQL-only multi-platform database client for FixerFramework — typed sql templates, transactions, broad dialect/driver support",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./postgres": {
+      "types": "./dist/postgres.d.ts",
+      "import": "./dist/postgres.js"
+    },
+    "./neon": {
+      "types": "./dist/neon.d.ts",
+      "import": "./dist/neon.js"
+    },
+    "./mysql": {
+      "types": "./dist/mysql.d.ts",
+      "import": "./dist/mysql.js"
+    },
+    "./planetscale": {
+      "types": "./dist/planetscale.d.ts",
+      "import": "./dist/planetscale.js"
+    },
+    "./sqlite": {
+      "types": "./dist/sqlite.d.ts",
+      "import": "./dist/sqlite.js"
+    },
+    "./bun-sqlite": {
+      "types": "./dist/bun-sqlite.d.ts",
+      "import": "./dist/bun-sqlite.js"
+    },
+    "./libsql": {
+      "types": "./dist/libsql.d.ts",
+      "import": "./dist/libsql.js"
+    },
+    "./d1": {
+      "types": "./dist/d1.d.ts",
+      "import": "./dist/d1.js"
+    },
+    "./mssql": {
+      "types": "./dist/mssql.d.ts",
+      "import": "./dist/mssql.js"
+    },
+    "./rds-data": {
+      "types": "./dist/rds-data.d.ts",
+      "import": "./dist/rds-data.js"
+    },
+    "./cockroach": {
+      "types": "./dist/cockroach.d.ts",
+      "import": "./dist/cockroach.js"
+    },
+    "./tidb": {
+      "types": "./dist/tidb.d.ts",
+      "import": "./dist/tidb.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "DESIGN.md"
+  ],
+  "scripts": {
+    "build": "fixer-bundle --mode lib --no-format --no-lint --no-typecheck --no-test",
+    "check": "fixer-bundle --mode lib --no-build --format-check",
+    "test": "vitest run",
+    "prepublishOnly": "bun run build"
+  },
+  "publishConfig": {
+    "registry": "https://registry.fixerframework.com",
+    "access": "public"
+  },
+  "peerDependencies": {
+    "pg": "^8.0.0",
+    "postgres": "^3.0.0",
+    "@neondatabase/serverless": ">=0.10.0",
+    "mysql2": "^3.0.0",
+    "@planetscale/database": "^1.0.0",
+    "better-sqlite3": ">=11.0.0",
+    "@libsql/client": ">=0.14.0",
+    "mssql": ">=10.0.0",
+    "@aws-sdk/client-rds-data": ">=3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "pg": { "optional": true },
+    "postgres": { "optional": true },
+    "@neondatabase/serverless": { "optional": true },
+    "mysql2": { "optional": true },
+    "@planetscale/database": { "optional": true },
+    "better-sqlite3": { "optional": true },
+    "@libsql/client": { "optional": true },
+    "mssql": { "optional": true },
+    "@aws-sdk/client-rds-data": { "optional": true }
+  },
+  "devDependencies": {
+    "@fixerframework/bundler": "workspace:*",
+    "@types/bun": "catalog:types",
+    "vitest": "catalog:binaries"
+  }
+}

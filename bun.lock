@@ -91,6 +91,37 @@
         "lightningcss-linux-x64-gnu": "catalog:bindings",
       },
     },
+    "packages/db": {
+      "name": "@fixerframework/db",
+      "version": "0.1.0",
+      "devDependencies": {
+        "@fixerframework/bundler": "workspace:*",
+        "@types/bun": "catalog:types",
+        "vitest": "catalog:binaries",
+      },
+      "peerDependencies": {
+        "@aws-sdk/client-rds-data": ">=3.0.0",
+        "@libsql/client": ">=0.14.0",
+        "@neondatabase/serverless": ">=0.10.0",
+        "@planetscale/database": "^1.0.0",
+        "better-sqlite3": ">=11.0.0",
+        "mssql": ">=10.0.0",
+        "mysql2": "^3.0.0",
+        "pg": "^8.0.0",
+        "postgres": "^3.0.0",
+      },
+      "optionalPeers": [
+        "@aws-sdk/client-rds-data",
+        "@libsql/client",
+        "@neondatabase/serverless",
+        "@planetscale/database",
+        "better-sqlite3",
+        "mssql",
+        "mysql2",
+        "pg",
+        "postgres",
+      ],
+    },
     "packages/router": {
       "name": "@fixerframework/router",
       "version": "0.1.0",
@@ -223,6 +254,7 @@
       "@fixerframework/animation": "workspace:*",
       "@fixerframework/auth": "workspace:*",
       "@fixerframework/bundler": "workspace:*",
+      "@fixerframework/db": "workspace:*",
       "@fixerframework/router": "workspace:*",
       "@fixerframework/state": "workspace:*",
       "@fixerframework/ui": "workspace:*",
@@ -291,6 +323,8 @@
     "@fixerframework/auth": ["@fixerframework/auth@workspace:packages/auth"],
 
     "@fixerframework/bundler": ["@fixerframework/bundler@workspace:packages/bundler"],
+
+    "@fixerframework/db": ["@fixerframework/db@workspace:packages/db"],
 
     "@fixerframework/router": ["@fixerframework/router@workspace:packages/router"],
 
