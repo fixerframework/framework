@@ -1,6 +1,11 @@
-import { builtinModules } from "node:module";
+import { join, relative } from "node:path";
 import { defineConfig, type UserConfig } from "vite";
-import { detectServerEntry, readPackageExternals } from "./package-meta.ts";
+import {
+  detectServerEntry,
+  isHostBuiltin,
+  isPackageExternal,
+  readPackageExternals,
+} from "./package-meta.ts";
 import type { ServerConfigOptions } from "./types.ts";
 
 export function defineServerConfig(options: ServerConfigOptions = {}): UserConfig {
@@ -13,18 +18,24 @@ export function defineServerConfig(options: ServerConfigOptions = {}): UserConfi
     ...rest
   } = options;
 
-  const entry = entryOpt ?? detectServerEntry(cwd);
-  if (!entry) {
+  const resolvedEntry = entryOpt
+    ? entryOpt.startsWith("/")
+      ? entryOpt
+      : join(cwd, entryOpt)
+    : detectServerEntry(cwd);
+
+  if (!resolvedEntry) {
     throw new Error(
       `[fixer-bundle] server mode: no entry found (src/server.ts|server.ts|…) in ${cwd}`,
     );
   }
 
   const externals = readPackageExternals(cwd);
-  const builtins = new Set([...builtinModules, ...builtinModules.map((m) => `node:${m}`)]);
+  const entry = relative(cwd, resolvedEntry) || resolvedEntry;
 
   return defineConfig({
     ...rest,
+    root: cwd,
     build: {
       outDir,
       emptyOutDir: true,
@@ -35,14 +46,7 @@ export function defineServerConfig(options: ServerConfigOptions = {}): UserConfi
         fileName: "server",
       },
       rollupOptions: {
-        external: (id) => {
-          if (builtins.has(id)) return true;
-          if (externals.has(id)) return true;
-          for (const name of externals) {
-            if (id === name || id.startsWith(`${name}/`)) return true;
-          }
-          return false;
-        },
+        external: (id) => isHostBuiltin(id) || isPackageExternal(id, externals),
       },
       ...buildOpt,
     },

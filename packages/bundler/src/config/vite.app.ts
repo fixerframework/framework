@@ -13,6 +13,7 @@ export function defineAppConfig(options: AppConfigOptions = {}): UserConfig {
 
   return defineConfig({
     ...rest,
+    root: cwd,
     build: {
       outDir,
       emptyOutDir: true,

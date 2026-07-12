@@ -1,7 +1,12 @@
 import { copyFileSync, mkdirSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { defineConfig, type Plugin, type UserConfig } from "vite";
-import { resolveLibEntry, readPackageExternals } from "./package-meta.ts";
+import {
+  isHostBuiltin,
+  isPackageExternal,
+  readPackageExternals,
+  resolveLibEntry,
+} from "./package-meta.ts";
 import type { CopyAsset, LibConfigOptions } from "./types.ts";
 
 function copyAssetsPlugin(cwd: string, outDir: string, assets: CopyAsset[]): Plugin {
@@ -90,38 +95,7 @@ export function defineLibConfig(options: LibConfigOptions = {}): UserConfig {
           : "index",
       },
       rollupOptions: {
-        external: (id) => {
-          if (externals.has(id)) return true;
-          for (const name of externals) {
-            if (id === name || id.startsWith(`${name}/`)) return true;
-          }
-          // Node / Bun builtins (lib builds must not bundle host runtime modules)
-          if (
-            id.startsWith("node:") ||
-            id.startsWith("bun:") ||
-            [
-              "assert",
-              "buffer",
-              "child_process",
-              "crypto",
-              "events",
-              "fs",
-              "fs/promises",
-              "http",
-              "https",
-              "module",
-              "os",
-              "path",
-              "process",
-              "stream",
-              "url",
-              "util",
-            ].includes(id)
-          ) {
-            return true;
-          }
-          return false;
-        },
+        external: (id) => isHostBuiltin(id) || isPackageExternal(id, externals),
       },
       ...buildOpt,
     },

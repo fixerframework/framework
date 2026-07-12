@@ -29,6 +29,10 @@ describe("config factories merge nested overrides", () => {
     });
     expect(cfg.build?.lib && "entry" in cfg.build.lib).toBe(true);
     expect(cfg.build?.rollupOptions?.external).toBeTypeOf("function");
+    const external = cfg.build?.rollupOptions?.external as (id: string) => boolean;
+    expect(external("net")).toBe(true);
+    expect(external("node:http2")).toBe(true);
+    expect(external("worker_threads")).toBe(true);
   });
 
   it("defineLibConfig accepts multi-entry map with dynamic fileName", () => {
@@ -53,6 +57,7 @@ describe("config factories merge nested overrides", () => {
     writeFileSync(join(cwd, "index.html"), "<!doctype html><html></html>");
     const cfg = defineAppConfig({ cwd, build: { sourcemap: true } });
 
+    expect(cfg.root).toBe(cwd);
     expect(cfg.build?.sourcemap).toBe(true);
     expect(cfg.build?.outDir).toBe("dist");
     expect(cfg.build?.emptyOutDir).toBe(true);
@@ -67,6 +72,7 @@ describe("config factories merge nested overrides", () => {
     const cwd = tempPkgWithEntry("src/server.ts");
     const cfg = defineServerConfig({ cwd, build: { sourcemap: true } });
 
+    expect(cfg.root).toBe(cwd);
     expect(cfg.build?.sourcemap).toBe(true);
     expect(cfg.build?.outDir).toBe("dist");
     expect(cfg.build?.ssr).toBe(true);
@@ -74,6 +80,8 @@ describe("config factories merge nested overrides", () => {
       formats: ["es"],
       fileName: "server",
     });
+    const external = cfg.build?.rollupOptions?.external as (id: string) => boolean;
+    expect(external("net")).toBe(true);
   });
 
   it("defineVitestConfig keeps test defaults when test partial is passed", () => {
