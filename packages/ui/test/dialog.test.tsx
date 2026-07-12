@@ -50,16 +50,46 @@ describe("Dialog", () => {
     expect(document.querySelector('[role="dialog"]')).not.toBeNull();
     open.value = false;
     await flush();
-    // exit animation may keep node briefly; wait a couple frames of microtasks
     await flush();
     await flush();
-    // under default motion the node may still be exiting — force allow either null or opacity-fading
+    // exit animation may keep node briefly
     const dialog = document.querySelector('[role="dialog"]');
     if (dialog) {
-      // still exiting is ok if open signal is false and content is leaving
       expect(open.value).toBe(false);
     } else {
       expect(dialog).toBeNull();
     }
+  });
+
+  it("omits aria-describedby without Description", async () => {
+    const root = mount(
+      <Dialog.Root defaultOpen>
+        <Dialog.Content>
+          <Dialog.Title>Only title</Dialog.Title>
+        </Dialog.Content>
+      </Dialog.Root>,
+    );
+    await flush();
+    const dialog = document.querySelector('[role="dialog"]');
+    expect(dialog).not.toBeNull();
+    expect(dialog!.hasAttribute("aria-describedby")).toBe(false);
+    // ensure title is still labelled
+    expect(dialog!.getAttribute("aria-labelledby")).toBeTruthy();
+    void root;
+  });
+
+  it("sets aria-describedby when Description is present", async () => {
+    mount(
+      <Dialog.Root defaultOpen>
+        <Dialog.Content>
+          <Dialog.Title>T</Dialog.Title>
+          <Dialog.Description>Helpful text</Dialog.Description>
+        </Dialog.Content>
+      </Dialog.Root>,
+    );
+    await flush();
+    await flush();
+    const dialog = document.querySelector('[role="dialog"]');
+    expect(dialog?.getAttribute("aria-describedby")).toBeTruthy();
   });
 });

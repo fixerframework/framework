@@ -1,4 +1,4 @@
-import { useEffect } from "preact/hooks";
+import { useEffect, useRef } from "preact/hooks";
 
 export interface UseDismissOptions {
   open: boolean;
@@ -19,13 +19,16 @@ export function useDismiss({
   escape = true,
   outside = true,
 }: UseDismissOptions): void {
+  const onDismissRef = useRef(onDismiss);
+  onDismissRef.current = onDismiss;
+
   useEffect(() => {
     if (!open) return;
 
     const onKey = (e: KeyboardEvent) => {
       if (escape && e.key === "Escape") {
         e.stopPropagation();
-        onDismiss();
+        onDismissRef.current();
       }
     };
 
@@ -33,7 +36,7 @@ export function useDismiss({
       if (!outside || !rootRef?.current) return;
       const target = e.target as Node | null;
       if (target && !rootRef.current.contains(target)) {
-        onDismiss();
+        onDismissRef.current();
       }
     };
 
@@ -43,5 +46,5 @@ export function useDismiss({
       document.removeEventListener("keydown", onKey, true);
       document.removeEventListener("pointerdown", onPointer, true);
     };
-  }, [open, onDismiss, rootRef, escape, outside]);
+  }, [open, rootRef, escape, outside]);
 }

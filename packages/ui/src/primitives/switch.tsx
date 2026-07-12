@@ -1,10 +1,21 @@
 import type { JSX } from "preact";
+import { useState } from "preact/hooks";
 import { cn } from "../lib/cn.ts";
 
 export interface SwitchProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, "type"> {}
 
 /** Accessible switch built on checkbox semantics + styling. */
-export function Switch({ className, checked, ...props }: SwitchProps) {
+export function Switch({
+  className,
+  checked: checkedProp,
+  defaultChecked,
+  onChange,
+  ...props
+}: SwitchProps) {
+  const isControlled = checkedProp !== undefined;
+  const [uncontrolled, setUncontrolled] = useState(Boolean(defaultChecked));
+  const checked = isControlled ? Boolean(checkedProp) : uncontrolled;
+
   return (
     <label
       className={cn(
@@ -14,7 +25,20 @@ export function Switch({ className, checked, ...props }: SwitchProps) {
         className,
       )}
     >
-      <input type="checkbox" role="switch" className="peer sr-only" checked={checked} {...props} />
+      <input
+        type="checkbox"
+        role="switch"
+        className="peer sr-only"
+        checked={isControlled ? checkedProp : undefined}
+        defaultChecked={isControlled ? undefined : defaultChecked}
+        onChange={(e) => {
+          if (!isControlled) {
+            setUncontrolled((e.currentTarget as HTMLInputElement).checked);
+          }
+          onChange?.(e);
+        }}
+        {...props}
+      />
       <span
         className={cn(
           "pointer-events-none block size-4 rounded-full bg-background shadow transition-transform",
