@@ -80,6 +80,15 @@ export function defineLibConfig(options: LibConfigOptions = {}): UserConfig {
           Object.entries(entry).map(([name, abs]) => [name, relative(cwd, abs) || abs]),
         );
 
+  const defaultLib = {
+    entry: libEntry,
+    formats: ["es" as const],
+    fileName: isMulti ? (_format: string, entryName: string) => `${entryName}.js` : "index",
+  };
+  const defaultRollupOptions = {
+    external: (id: string) => isHostBuiltin(id) || isPackageExternal(id, externals),
+  };
+
   return defineConfig({
     ...rest,
     root: cwd,
@@ -87,17 +96,10 @@ export function defineLibConfig(options: LibConfigOptions = {}): UserConfig {
     build: {
       outDir,
       emptyOutDir: true,
-      lib: {
-        entry: libEntry,
-        formats: ["es"],
-        fileName: isMulti
-          ? (_format, entryName) => `${entryName}.js`
-          : "index",
-      },
-      rollupOptions: {
-        external: (id) => isHostBuiltin(id) || isPackageExternal(id, externals),
-      },
       ...buildOpt,
+      // Keep lib/rollup defaults unless the consumer explicitly overrides those keys.
+      lib: buildOpt?.lib ?? defaultLib,
+      rollupOptions: buildOpt?.rollupOptions ?? defaultRollupOptions,
     },
     oxc: {
       jsx: {

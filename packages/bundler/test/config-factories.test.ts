@@ -43,14 +43,15 @@ describe("config factories merge nested overrides", () => {
       entry: { index: "./index.ts", server: "./server.ts" },
     });
 
-    expect(cfg.build?.lib?.formats).toEqual(["es"]);
-    expect(typeof cfg.build?.lib?.fileName).toBe("function");
-    const fileName = cfg.build?.lib?.fileName;
-    if (typeof fileName === "function") {
-      expect(fileName("es", "server")).toBe("server.js");
+    const lib = cfg.build?.lib;
+    expect(lib && typeof lib === "object").toBe(true);
+    if (!lib || typeof lib !== "object") return;
+    expect(lib.formats).toEqual(["es"]);
+    expect(typeof lib.fileName).toBe("function");
+    if (typeof lib.fileName === "function") {
+      expect(lib.fileName("es", "server")).toBe("server.js");
     }
   });
-
 
   it("defineAppConfig keeps build defaults when build partial is passed", () => {
     const cwd = mkdtempSync(join(tmpdir(), "ff-bundle-app-"));

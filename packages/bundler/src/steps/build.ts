@@ -21,22 +21,30 @@ function inlineConfigForMode(options: CliOptions) {
   }
 }
 
-/** True only when tsconfig.build.json exists and enables declaration emit. */
-function wantsDts(cwd: string): boolean {
-  const buildTsconfig = join(cwd, "tsconfig.build.json");
-  if (!existsSync(buildTsconfig)) return false;
+type BuildTsconfig = {
+  compilerOptions?: { declaration?: boolean; outDir?: string };
+};
 
+/** Parse tsconfig.build.json, stripping line and block comments. */
+function readBuildTsconfig(cwd: string): BuildTsconfig | null {
+  const buildTsconfig = join(cwd, "tsconfig.build.json");
+  if (!existsSync(buildTsconfig)) return null;
   try {
     const raw = readFileSync(buildTsconfig, "utf8");
-    // Tolerate // and /* */ comments common in tsconfig JSON.
     const stripped = raw.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
-    const json = JSON.parse(stripped) as {
-      compilerOptions?: { declaration?: boolean };
-    };
-    return json.compilerOptions?.declaration === true;
+    return JSON.parse(stripped) as BuildTsconfig;
   } catch {
-    return false;
+    return null;
   }
+}
+
+/** True only when tsconfig.build.json exists and enables declaration emit. */
+function wantsDts(cwd: string): boolean {
+  return readBuildTsconfig(cwd)?.compilerOptions?.declaration === true;
+}
+
+function dtsOutDir(cwd: string): string {
+  return readBuildTsconfig(cwd)?.compilerOptions?.outDir ?? "dist";
 }
 
 /**
@@ -83,7 +91,7 @@ async function runDts(cwd: string): Promise<StepResult | null> {
       cwd,
     });
     if (result.code === 0) {
-      rewriteDtsImportExtensions(join(cwd, "dist"));
+      rewriteDtsImportExtensions(join(cwd, dtsOutDir(cwd)));
       return null;
     }
     console.error(
@@ -117,7 +125,7 @@ async function runDts(cwd: string): Promise<StepResult | null> {
     cwd,
   });
   if (result.code === 0) {
-    rewriteDtsImportExtensions(join(cwd, "dist"));
+    rewriteDtsImportExtensions(join(cwd, dtsOutDir(cwd)));
     return null;
   }
 
@@ -134,6 +142,9 @@ export async function runBuild(options: CliOptions): Promise<StepResult> {
     const local = explicit ?? findLocalViteConfig(options.cwd);
 
     if (local) {
+      console.log(
+        `[fixer-bundle] note: using config file (${local}); --mode ${options.mode} is not applied to the Vite build`,
+      );
       // Use vite CLI so config resolution plugins work fully
       const viteBin = resolveBin("vite");
       if (!viteBin) {
@@ -149,8 +160,21 @@ export async function runBuild(options: CliOptions): Promise<StepResult> {
       });
       if (result.code !== 0) return { name: "build", code: result.code };
     } else {
-      // Zero-config programmatic build does not support --watch yet.
       const config = inlineConfigForMode(options);
+      if (options.watch) {
+        // Programmatic watch: Vite keeps the process alive until interrupted.
+        await viteBuild({
+          ...config,
+          configFile: false,
+          root: options.cwd,
+          build: {
+            ...config.build,
+            watch: {},
+          },
+        });
+        // Watch mode does not run one-shot DTS after the watcher ends normally.
+        return { name: "build", code: 0 };
+      }
       await viteBuild({
         ...config,
         configFile: false,
