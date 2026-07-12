@@ -1,9 +1,9 @@
-import type { RedirectRule } from "../types.ts";
-
 /**
  * Minimal structural types for Cloudflare Pages Functions.
  * Defined here to avoid a hard dependency on `@cloudflare/workers-types`.
  */
+
+import { isStaticAssetPath } from "../cloudflare/static-assets.ts";
 
 export interface AssetFetcher {
   fetch(request: Request): Promise<Response>;
@@ -34,13 +34,6 @@ export type PagesFunction<Env = PagesEnv> = (
 /** App-level request handler (the FixerFramework server entry point). */
 export type AppHandler = (request: Request) => Promise<Response> | Response;
 
-/** Regex matching common static asset file extensions. */
-const STATIC_ASSET_RE =
-  /\.(?:html|js|css|png|jpg|jpeg|gif|webp|avif|svg|ico|woff|woff2|ttf|eot|otf|wasm|map|txt|xml|webmanifest|pdf)$/;
-
-/** Paths always served as static in SSR mode. */
-const STATIC_PATH_RE = /^\/(?:assets|static|public)\//;
-
 /**
  * Wrap an app request handler into a Cloudflare Pages Function.
  *
@@ -63,8 +56,7 @@ export function createPagesHandler<Env extends PagesEnv = PagesEnv>(
   return async (context) => {
     const url = new URL(context.request.url);
     if (
-      STATIC_ASSET_RE.test(url.pathname) ||
-      STATIC_PATH_RE.test(url.pathname) ||
+      isStaticAssetPath(url.pathname) ||
       exclude.some((re) => re.test(url.pathname))
     ) {
       return context.env.ASSETS.fetch(context.request);
@@ -72,4 +64,3 @@ export function createPagesHandler<Env extends PagesEnv = PagesEnv>(
     return handler(context.request);
   };
 }
-

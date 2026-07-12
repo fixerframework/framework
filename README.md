@@ -75,7 +75,8 @@ fixerframework/
 | `@fixerframework/animation` | Motion-style engine: `motion.*`, presence, springs, layout, drag |
 | `@fixerframework/router` | Declarative SPA router: nested layouts, loaders, signals location |
 | `@fixerframework/bundler` | Shared Vite/Rolldown build CLI: format → lint → typecheck → test → build |
-| `@fixerframework/adapters` | Deploy adapters (e.g. Cloudflare Pages) |
+| `@fixerframework/adapters` | Deploy adapters (Cloudflare Pages, Cloudflare Workers) |
+| `@fixerframework/db` | SQL-only multi-platform client (`sql` templates, transactions, many drivers) |
 | `@fixerframework/utils` | Shared utilities                                                     |
 
 **Dependency direction:** `ui` → `state` → `utils`; `ui` → `animation`; `router` is independent (signals + Preact only). No cycles.

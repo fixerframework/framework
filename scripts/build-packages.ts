@@ -15,6 +15,7 @@ const stages: string[][] = [
     "@fixerframework/router",
     "@fixerframework/adapters",
     "@fixerframework/auth",
+    "@fixerframework/db",
   ],
   ["@fixerframework/state"],
   ["@fixerframework/ui"],

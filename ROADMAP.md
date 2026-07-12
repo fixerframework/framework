@@ -25,6 +25,7 @@ Ship a coherent core that apps can depend on without platform magic.
 - [x] `@fixerframework/animation` — usable public surface + tests
 - [x] `@fixerframework/router` — declarative SPA routes, loaders, `Link` / `Outlet`, signals location
 - [ ] `@fixerframework/utils` — shared helpers used by other packages
+- [x] `@fixerframework/db` — SQL-only multi-platform client (typed `sql`, transactions, broad drivers)
 - [x] Root docs: README + ROADMAP (this)
 - [x] Stable package exports and peer dependency story for consumers (`dist/` ESM + types, `publishConfig` → registry.fixerframework.com)
 - [ ] SSR / hydration path (deferred from state v1; required before serious multi-page apps)

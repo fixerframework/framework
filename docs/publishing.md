@@ -22,7 +22,7 @@ bun install
 bun run build
 ```
 
-Build order is topological: `bundler` → `utils` → (`animation` | `router` | `adapters` | `auth`) → `state` → `ui`.
+Build order is topological: `bundler` → `utils` → (`animation` | `router` | `adapters` | `auth` | `db`) → `state` → `ui`.
 
 ## Pack / publish
 
