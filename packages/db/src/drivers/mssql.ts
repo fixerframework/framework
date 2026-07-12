@@ -1,35 +1,8 @@
 import type { CompiledQuery, Driver, DriverTx, QueryResult } from "../core/types.ts";
 import { DbError } from "../core/errors.ts";
 import { importPeer } from "../internal/assert-peer.ts";
-
-export interface MssqlConfig {
-  connectionString?: string;
-  server?: string;
-  database?: string;
-  user?: string;
-  password?: string;
-  options?: Record<string, unknown>;
-  pool?: MssqlPoolLike;
-}
-
-export interface MssqlPoolLike {
-  request: () => MssqlRequestLike;
-  connect?: () => Promise<MssqlPoolLike>;
-  close?: () => Promise<void>;
-  transaction?: () => MssqlTransactionLike;
-}
-
-export interface MssqlRequestLike {
-  input: (name: string, value: unknown) => MssqlRequestLike;
-  query: (text: string) => Promise<{ recordset?: unknown[]; rowsAffected?: number[] }>;
-}
-
-export interface MssqlTransactionLike {
-  begin: () => Promise<void>;
-  commit: () => Promise<void>;
-  rollback: () => Promise<void>;
-  request: () => MssqlRequestLike;
-}
+import type { MssqlConfig, MssqlPoolLike, MssqlRequestLike, MssqlTransactionLike } from "@fixerframework/types/db/drivers";
+export type { MssqlConfig, MssqlPoolLike, MssqlRequestLike, MssqlTransactionLike };
 
 type MssqlModule = {
   connect: (config: object) => Promise<MssqlPoolLike>;

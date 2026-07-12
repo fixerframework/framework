@@ -1,13 +1,8 @@
-import type { JSX } from "preact";
+import type { LinkProps } from "@fixerframework/types/router";
 import { applyBase, parsePath, resolvePath } from "../core/path.ts";
 import { useLocation, useRouter } from "./hooks.ts";
 
-export interface LinkProps extends Omit<JSX.AnchorHTMLAttributes<HTMLAnchorElement>, "href"> {
-  href: string;
-  /** When true, aria-current only if pathname equals href path exactly. Default: prefix match. */
-  exact?: boolean;
-  replace?: boolean;
-}
+export type { LinkProps };
 
 function appPathFromHref(href: string, base: string, fromPathname: string): string {
   if (href.startsWith("http://") || href.startsWith("https://")) {

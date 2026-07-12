@@ -2,11 +2,7 @@
  * Async primitives shared across packages and tests.
  */
 
-export interface Deferred<T = void> {
-  promise: Promise<T>;
-  resolve: (value: T) => void;
-  reject: (reason: unknown) => void;
-}
+import type { Deferred } from "@fixerframework/types/utils";
 
 /**
  * Create a controllable promise: resolve/reject from the outside.

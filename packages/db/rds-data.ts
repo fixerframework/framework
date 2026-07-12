@@ -1,5 +1,1 @@
-export {
-  rdsData,
-  type RdsDataConfig,
-  type RdsDataClientLike,
-} from "./src/drivers/rds-data.ts";
+export { rdsData } from "./src/drivers/rds-data.ts";

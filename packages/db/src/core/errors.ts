@@ -1,13 +1,6 @@
-/** Stable error codes for @fixerframework/db. */
-export type DbErrorCode =
-  | "QUERY_FAILED"
-  | "TX_UNSUPPORTED"
-  | "TX_FAILED"
-  | "PEER_MISSING"
-  | "CONNECTION"
-  | "COMPILE"
-  | "CODEC"
-  | "CLOSED";
+import type { DbErrorCode } from "@fixerframework/types/db";
+
+export type { DbErrorCode };
 
 export class DbError extends Error {
   readonly code: DbErrorCode;

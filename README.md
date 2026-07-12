@@ -52,6 +52,7 @@ fixerframework/
 │   ├── blog/             # Blog
 │   └── registry/         # Registry
 ├── packages/
+│   ├── types/            # @fixerframework/types (shared public types)
 │   ├── auth/             # @fixerframework/auth
 │   ├── state/            # @fixerframework/state
 │   ├── ui/               # @fixerframework/ui
@@ -69,6 +70,7 @@ fixerframework/
 
 | Package                 | Role                                                                 |
 | ----------------------- | -------------------------------------------------------------------- |
+| `@fixerframework/types` | Shared public TypeScript types (import types only from here)         |
 | `@fixerframework/auth`  | Auth runtime (e.g. Clerk-backed), signals for identity and tokens    |
 | `@fixerframework/state` | Unified signal store: atoms, queries, mutations, auth-aware scope    |
 | `@fixerframework/ui`    | Preact primitives + theme, first-class state bridges (`Show`, `Await`, …) |
@@ -79,7 +81,9 @@ fixerframework/
 | `@fixerframework/db` | SQL-only multi-platform client (`sql` templates, transactions, many drivers) |
 | `@fixerframework/utils` | Shared utilities                                                     |
 
-**Dependency direction:** `ui` → `state` → `utils`; `ui` → `animation`; `router` is independent (signals + Preact only). No cycles.
+**Types vs values:** import types from `@fixerframework/types` (or domain subpaths like `@fixerframework/types/state`). Import runtime values from the owning package.
+
+**Dependency direction:** `types` is the foundation for type imports; `ui` → `state` → `utils`; `ui` → `animation`; `router` is independent (signals + Preact only). No cycles.
 
 Stack leanings: **Preact**, **`@preact/signals-core`**, Bun workspaces, portable tooling (Vite/Rolldown, Vitest, oxlint/oxfmt). Not React. Not “deploy only here.”
 
@@ -89,7 +93,7 @@ Packages ship **built ESM + `.d.ts`** under `dist/` (not raw TypeScript). After 
 
 ```bash
 bun install
-bun run build    # topological: bundler → utils → … → ui
+bun run build    # topological: bundler → types → utils → … → ui
 bun run test
 bun run pack:check
 ```

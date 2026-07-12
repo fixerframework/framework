@@ -1,7 +1,7 @@
-import type { JSX } from "preact";
+import type { TextareaProps } from "@fixerframework/types/ui";
 import { cn } from "../lib/cn.ts";
 
-export interface TextareaProps extends JSX.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+export type { TextareaProps };
 
 export function Textarea({ className, ...props }: TextareaProps) {
   return (

@@ -1,17 +1,9 @@
-import type { ReadonlySignal, Signal } from "@preact/signals-core";
 import type { ComponentChildren } from "preact";
+import type { ShowProps } from "@fixerframework/types/ui";
 import { isSignal } from "../lib/signal-open.ts";
 import { useSignalValue } from "../lib/use-signal-value.ts";
 
-export type ShowWhen<T> = T | Signal<T> | ReadonlySignal<T>;
-
-export interface ShowProps<T> {
-  /** Plain value or signal; truthy values render children. */
-  when: ShowWhen<T>;
-  /** Rendered when `when` is falsy. */
-  fallback?: ComponentChildren;
-  children: ComponentChildren | ((value: NonNullable<T>) => ComponentChildren);
-}
+export type { ShowProps, ShowWhen } from "@fixerframework/types/ui";
 
 /**
  * Conditionally render based on a signal or plain value.

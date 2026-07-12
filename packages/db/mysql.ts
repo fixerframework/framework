@@ -1,1 +1,1 @@
-export { mysql, type MysqlConfig, type MysqlPoolLike } from "./src/drivers/mysql2.ts";
+export { mysql } from "./src/drivers/mysql2.ts";

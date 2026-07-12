@@ -1,13 +1,7 @@
-import type { DialectId } from "../core/types.ts";
+import type { DialectId, SqlTypeName, TypeCodec } from "../core/types.ts";
 import { DbError } from "../core/errors.ts";
-import type { SqlTypeName } from "./ids.ts";
 
-export interface TypeCodec {
-  /** Encode a JS value for wire/driver binding. */
-  encode(value: unknown, hint?: SqlTypeName): unknown;
-  /** Decode a driver value into a convenient JS form (best-effort). */
-  decode(value: unknown, hint?: SqlTypeName): unknown;
-}
+export type { TypeCodec };
 
 function isUint8Array(v: unknown): v is Uint8Array {
   return v instanceof Uint8Array;

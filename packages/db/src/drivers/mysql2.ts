@@ -1,34 +1,8 @@
 import type { CompiledQuery, Driver, DriverTx, QueryResult } from "../core/types.ts";
 import { DbError } from "../core/errors.ts";
 import { importPeer } from "../internal/assert-peer.ts";
-
-export interface MysqlConfig {
-  uri?: string;
-  host?: string;
-  user?: string;
-  password?: string;
-  database?: string;
-  port?: number;
-  pool?: MysqlPoolLike;
-  quirks?: string[];
-}
-
-export interface MysqlPoolLike {
-  execute: (
-    sql: string,
-    values?: unknown[],
-  ) => Promise<[unknown[] | { affectedRows?: number }, unknown]>;
-  getConnection?: () => Promise<MysqlConnectionLike>;
-  end?: () => Promise<void>;
-}
-
-export interface MysqlConnectionLike {
-  execute: MysqlPoolLike["execute"];
-  beginTransaction?: () => Promise<void>;
-  commit?: () => Promise<void>;
-  rollback?: () => Promise<void>;
-  release?: () => void;
-}
+import type { MysqlConfig, MysqlPoolLike, MysqlConnectionLike } from "@fixerframework/types/db/drivers";
+export type { MysqlConfig, MysqlPoolLike, MysqlConnectionLike };
 
 type Mysql2Module = {
   createPool: (config: object) => MysqlPoolLike;

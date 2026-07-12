@@ -9,6 +9,7 @@
  *   useMotionValue,
  *   MotionConfig,
  * } from '@fixerframework/animation'
+ * import type { MotionProps, Transition } from '@fixerframework/types/animation'
  *
  * <MotionConfig reducedMotion="user">
  *   <AnimatePresence>
@@ -45,18 +46,3 @@ export {
 } from "./src/preact/hooks.ts";
 export { __setReducedMotionOverride } from "./src/core/reduced-motion.ts";
 
-export type {
-  MotionProps,
-  Transition,
-  Variant,
-  Variants,
-  Target,
-  TargetAndTransition,
-  AnimationPlaybackControls,
-  ReducedMotionSetting,
-  DragConstraints,
-  DragAxis,
-  SpringTransition,
-  TweenTransition,
-  Easing,
-} from "./src/core/types.ts";

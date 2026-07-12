@@ -1,28 +1,9 @@
 import type { CompiledQuery, Driver, DriverTx, QueryResult } from "../core/types.ts";
 import { DbError } from "../core/errors.ts";
-
-export interface BunSqliteConfig {
-  /** Path or `":memory:"`. Default: `":memory:"`. */
-  path?: string;
-  /**
-   * Existing Bun Database instance. When set, `path` is ignored and
-   * close() will not close the external instance.
-   */
-  database?: BunDatabase;
-  /** Close the database on driver.close(). Default: true when path-created. */
-  closeOnDisconnect?: boolean;
-}
+import type { BunSqliteConfig, BunDatabase } from "@fixerframework/types/db/drivers";
+export type { BunSqliteConfig, BunDatabase };
 
 /** Structural subset of bun:sqlite Database. */
-export interface BunDatabase {
-  query(sql: string): {
-    all: (...params: unknown[]) => unknown[];
-    run: (...params: unknown[]) => { changes: number };
-  };
-  close(): void;
-  exec?(sql: string): void;
-}
-
 async function loadBunSqlite(): Promise<{ Database: new (path: string) => BunDatabase }> {
   try {
     // Variable module id avoids TS resolving bun:sqlite during declaration emit.

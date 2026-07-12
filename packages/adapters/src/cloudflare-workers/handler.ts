@@ -1,47 +1,25 @@
+/**
+ * Cloudflare Workers runtime bridge.
+ * Types come from `@fixerframework/types/adapters` (shared with Pages where applicable).
+ */
+
+import type {
+  AppHandler,
+  AssetFetcher,
+  CreateWorkerHandlerOptions,
+  WorkerFetchHandler,
+  WorkersEnv,
+} from "@fixerframework/types/adapters";
 import { isStaticAssetPath } from "../cloudflare/static-assets.ts";
 
-/**
- * Minimal structural types for Cloudflare Workers.
- * Defined here to avoid a hard dependency on `@cloudflare/workers-types`.
- */
-
-export interface AssetFetcher {
-  fetch(request: Request): Promise<Response>;
-}
-
-export interface WorkersEnv {
-  ASSETS?: AssetFetcher;
-  [key: string]: unknown;
-}
-
-export interface ExecutionContext {
-  waitUntil(promise: Promise<unknown>): void;
-  passThroughOnException(): void;
-}
-
-/** App-level request handler (the FixerFramework server entry point). */
-export type AppHandler = (request: Request) => Promise<Response> | Response;
-
-/**
- * Worker `fetch` handler signature:
- * `export default { fetch: createWorkerHandler(...) }`.
- */
-export type WorkerFetchHandler<Env = WorkersEnv> = (
-  request: Request,
-  env: Env,
-  ctx: ExecutionContext,
-) => Promise<Response> | Response;
-
-export interface CreateWorkerHandlerOptions {
-  /**
-   * Extra path patterns treated as static (delegated to ASSETS when present).
-   */
-  exclude?: RegExp[];
-  /**
-   * Env key for the assets binding. Default: `"ASSETS"`.
-   */
-  assetsBinding?: string;
-}
+export type {
+  AppHandler,
+  AssetFetcher,
+  CreateWorkerHandlerOptions,
+  ExecutionContext,
+  WorkerFetchHandler,
+  WorkersEnv,
+} from "@fixerframework/types/adapters";
 
 function getAssetsFetcher(env: WorkersEnv, binding: string): AssetFetcher | undefined {
   const value = env[binding];

@@ -1,7 +1,7 @@
-import type { JSX } from "preact";
+import type { CheckboxProps } from "@fixerframework/types/ui";
 import { cn } from "../lib/cn.ts";
 
-export interface CheckboxProps extends Omit<JSX.InputHTMLAttributes<HTMLInputElement>, "type"> {}
+export type { CheckboxProps };
 
 export function Checkbox({ className, ...props }: CheckboxProps) {
   return (

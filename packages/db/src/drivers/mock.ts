@@ -1,15 +1,14 @@
-import type { CompiledQuery, DialectId, Driver, DriverTx, QueryResult } from "../core/types.ts";
+import type {
+  CompiledQuery,
+  DialectId,
+  Driver,
+  DriverTx,
+  MockDriverOptions,
+  QueryResult,
+} from "../core/types.ts";
 import { DbError } from "../core/errors.ts";
 
-export interface MockDriverOptions {
-  dialect?: DialectId;
-  /** Map of SQL text (trimmed) → rows to return. */
-  results?: Record<string, unknown[]>;
-  /** Handler override for full control. */
-  onExecute?: (compiled: CompiledQuery) => Promise<QueryResult> | QueryResult;
-  /** When true, begin() throws TX_UNSUPPORTED. */
-  noTx?: boolean;
-}
+export type { MockDriverOptions };
 
 /**
  * In-memory driver for unit tests.

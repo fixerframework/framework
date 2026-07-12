@@ -1,37 +1,18 @@
-import type { RedirectRule } from "../types.ts";
+import type {
+  CloudflareWorkersOptions,
+  GenerateWranglerOptions,
+  WranglerConfig,
+} from "@fixerframework/types/adapters";
 import {
   generateHeaders as generatePagesHeaders,
   generateRedirects as generatePagesRedirects,
 } from "../cloudflare-pages/config.ts";
-import type { CloudflareWorkersOptions } from "./options.ts";
+
+export type { GenerateWranglerOptions, WranglerConfig };
 
 /** Default Wrangler compatibility_date (deterministic builds / tests). */
 export const DEFAULT_COMPATIBILITY_DATE = "2026-07-01";
 
-/** Shape of a generated Wrangler JSON config (subset we emit). */
-export interface WranglerConfig {
-  name: string;
-  compatibility_date: string;
-  compatibility_flags?: string[];
-  main?: string;
-  assets: {
-    directory: string;
-    not_found_handling?: "single-page-application" | "404-page" | "none";
-    binding?: string;
-    run_worker_first?: boolean | string[];
-  };
-}
-
-/**
- * Options for pure Wrangler config generation.
- * `assetsDirectory` defaults to `"./dist"` when not provided.
- */
-export type GenerateWranglerOptions = CloudflareWorkersOptions & {
-  /** Required for a valid Wrangler config. */
-  name: string;
-  /** Absolute or relative assets dir; default `"./dist"`. */
-  assetsDirectory?: string;
-};
 
 /**
  * Generate `_headers` file content (same format as Pages / Workers Static Assets).
@@ -117,5 +98,3 @@ export function generateWranglerConfig(options: GenerateWranglerOptions): Wrangl
   return config;
 }
 
-/** Re-export RedirectRule usage helper type for tests. */
-export type { RedirectRule };

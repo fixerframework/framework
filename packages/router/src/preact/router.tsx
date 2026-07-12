@@ -1,15 +1,9 @@
-import type { ComponentChildren } from "preact";
 import { useEffect, useState } from "preact/hooks";
-import type { RouterRuntime } from "../core/types.ts";
+import type { RouterProps } from "@fixerframework/types/router";
 import { RouterContext } from "./context.ts";
 import { useSignalValue } from "./use-signal-value.ts";
 
-export interface RouterProps {
-  router: RouterRuntime;
-  /** Shown when status is loading and there is no committed match yet. */
-  fallback?: ComponentChildren;
-  children?: ComponentChildren;
-}
+export type { RouterProps };
 
 /**
  * Provides router context, starts history listening, and renders the matched route tree.

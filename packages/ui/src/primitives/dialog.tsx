@@ -7,7 +7,10 @@ import { trapFocus } from "../a11y/focus-trap.ts";
 import { useDismiss } from "../a11y/use-dismiss.ts";
 import { useId } from "../a11y/use-id.ts";
 import { cn } from "../lib/cn.ts";
-import { type MaybeSignal, useOpenState } from "../lib/signal-open.ts";
+import type { DialogContentProps, DialogRootProps } from "@fixerframework/types/ui";
+import { useOpenState } from "../lib/signal-open.ts";
+
+export type { DialogContentProps, DialogRootProps };
 
 interface DialogCtx {
   open: boolean;
@@ -24,13 +27,6 @@ function useDialogCtx(): DialogCtx {
   const ctx = useContext(DialogContext);
   if (!ctx) throw new Error("Dialog components must be used within Dialog.Root");
   return ctx;
-}
-
-export interface DialogRootProps {
-  open?: MaybeSignal<boolean>;
-  defaultOpen?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  children?: ComponentChildren;
 }
 
 function Root({ open, defaultOpen, onOpenChange, children }: DialogRootProps) {
@@ -73,10 +69,6 @@ function Trigger({ children, onClick, ...props }: DialogTriggerProps) {
       {children}
     </button>
   );
-}
-
-export interface DialogContentProps extends JSX.HTMLAttributes<HTMLDivElement> {
-  children?: ComponentChildren;
 }
 
 function Content({ className, children, ...props }: DialogContentProps) {

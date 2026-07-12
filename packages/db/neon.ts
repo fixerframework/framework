@@ -1,1 +1,1 @@
-export { neon, type NeonConfig, type NeonSql } from "./src/drivers/neon.ts";
+export { neon } from "./src/drivers/neon.ts";

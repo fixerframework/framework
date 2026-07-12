@@ -1,6 +1,8 @@
-import type { Query } from "@fixerframework/state";
 import type { ComponentChildren } from "preact";
+import type { AwaitProps } from "@fixerframework/types/ui";
 import { useSignalValue } from "../lib/use-signal-value.ts";
+
+export type { AwaitProps };
 
 function resolveSlot(
   slot: ComponentChildren | (() => ComponentChildren) | undefined,
@@ -8,15 +10,6 @@ function resolveSlot(
   if (slot === undefined) return null;
   if (typeof slot === "function") return (slot as () => ComponentChildren)();
   return slot;
-}
-
-export interface AwaitProps<T> {
-  query: Query<T>;
-  /** Shown while status is idle/pending and data is undefined. */
-  pending?: ComponentChildren | (() => ComponentChildren);
-  /** Shown when status is error and no data is available. */
-  error?: ComponentChildren | ((err: unknown) => ComponentChildren);
-  children: (data: T) => ComponentChildren;
 }
 
 /**

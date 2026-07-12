@@ -1,42 +1,8 @@
 import type { CompiledQuery, Driver, DriverTx, QueryResult } from "../core/types.ts";
 import { DbError } from "../core/errors.ts";
 import { importFirstPeer, importPeer } from "../internal/assert-peer.ts";
-
-export interface PostgresConfig {
-  connectionString?: string;
-  /** Prefer `pg` (node-postgres) or `postgres` (postgres.js). Default: auto. */
-  client?: "pg" | "postgres";
-  /** Existing pg Pool or Client. */
-  pool?: PgPoolLike;
-  /** Existing postgres.js sql instance. */
-  sql?: PostgresJsSql;
-  /** Quirk tags (e.g. cockroach). */
-  quirks?: string[];
-}
-
-export interface PgPoolLike {
-  query: (
-    text: string,
-    values?: unknown[],
-  ) => Promise<{ rows: unknown[]; rowCount: number | null; fields?: { name: string; dataTypeID?: number }[] }>;
-  connect?: () => Promise<PgClientLike>;
-  end?: () => Promise<void>;
-}
-
-export interface PgClientLike {
-  query: PgPoolLike["query"];
-  release?: () => void;
-  end?: () => Promise<void>;
-}
-
-export type PostgresJsSql = ((
-  strings: TemplateStringsArray,
-  ...values: unknown[]
-) => Promise<unknown[]>) & {
-  begin?: <T>(fn: (sql: PostgresJsSql) => Promise<T>) => Promise<T>;
-  end?: (options?: { timeout?: number }) => Promise<void>;
-  unsafe?: (query: string, params?: unknown[]) => Promise<unknown[]>;
-};
+import type { PostgresConfig, PgPoolLike, PgClientLike, PostgresJsSql } from "@fixerframework/types/db/drivers";
+export type { PostgresConfig, PgPoolLike, PgClientLike, PostgresJsSql };
 
 async function createPgDriver(config: PostgresConfig): Promise<Driver> {
   let pool: PgPoolLike;

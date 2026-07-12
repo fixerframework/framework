@@ -1,7 +1,8 @@
 import type { Driver } from "../core/types.ts";
-import { postgres, type PostgresConfig } from "./postgres.ts";
+import type { CockroachConfig } from "@fixerframework/types/db/drivers";
+import { postgres } from "./postgres.ts";
 
-export type CockroachConfig = PostgresConfig;
+export type { CockroachConfig };
 
 /**
  * CockroachDB uses the PostgreSQL wire protocol and dialect.

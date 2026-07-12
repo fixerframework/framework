@@ -1,12 +1,13 @@
 /**
  * @fixerframework/utils — Shared utilities
  *
- * Foundation layer: zero runtime dependencies. Provides type guards,
- * deterministic serialization, async primitives, object helpers, environment
- * detection, and auth-client helpers (JWT decoding, cookie serialization).
+ * Foundation layer: zero runtime dependencies (types via `@fixerframework/types`).
+ * Provides type guards, deterministic serialization, async primitives, object helpers,
+ * environment detection, and auth-client helpers (JWT decoding, cookie serialization).
  *
  * ```ts
  * import { stableStringify, deferred, decodeJwt, serializeCookie } from '@fixerframework/utils'
+ * import type { Deferred, JwtPayload, CookieOptions } from '@fixerframework/types'
  * ```
  */
 
@@ -29,7 +30,7 @@ export {
 export { stableStringify } from "./src/string.ts";
 
 // Async primitives
-export { deferred, sleep, withTimeout, type Deferred } from "./src/async.ts";
+export { deferred, sleep, withTimeout } from "./src/async.ts";
 
 // Object helpers
 export { shallowEqual, deepMerge } from "./src/object.ts";
@@ -43,8 +44,7 @@ export {
   base64urlDecode,
   decodeJwt,
   isJwtExpired,
-  type JwtPayload,
 } from "./src/jwt.ts";
 
 // Cookie utilities (auth client creation)
-export { serializeCookie, parseCookies, type CookieOptions } from "./src/cookie.ts";
+export { serializeCookie, parseCookies } from "./src/cookie.ts";

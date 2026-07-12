@@ -1,1 +1,1 @@
-export { tidb, type TidbConfig } from "./src/drivers/tidb.ts";
+export { tidb } from "./src/drivers/tidb.ts";

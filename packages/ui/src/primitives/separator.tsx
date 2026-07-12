@@ -1,10 +1,7 @@
-import type { JSX } from "preact";
+import type { SeparatorProps } from "@fixerframework/types/ui";
 import { cn } from "../lib/cn.ts";
 
-export interface SeparatorProps extends JSX.HTMLAttributes<HTMLDivElement> {
-  orientation?: "horizontal" | "vertical";
-  decorative?: boolean;
-}
+export type { SeparatorProps };
 
 export function Separator({
   className,

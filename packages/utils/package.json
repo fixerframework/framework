@@ -27,6 +27,9 @@
     "registry": "https://registry.fixerframework.com",
     "access": "public"
   },
+  "dependencies": {
+    "@fixerframework/types": "workspace:*"
+  },
   "devDependencies": {
     "@fixerframework/bundler": "workspace:*",
     "@types/bun": "catalog:types",

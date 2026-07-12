@@ -35,6 +35,7 @@
     "@auth/core": "catalog:clerk",
     "@clerk/backend": "catalog:clerk",
     "@clerk/clerk-js": "catalog:clerk",
+    "@fixerframework/types": "workspace:*",
     "@preact/signals-core": "catalog:preact"
   },
   "devDependencies": {

@@ -1,0 +1,97 @@
+{
+  "name": "@fixerframework/types",
+  "version": "0.1.0",
+  "description": "Shared public TypeScript types for FixerFramework packages",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./auth": {
+      "types": "./dist/src/auth.d.ts",
+      "import": "./dist/auth.js"
+    },
+    "./auth/server": {
+      "types": "./dist/src/auth-server.d.ts",
+      "import": "./dist/auth-server.js"
+    },
+    "./state": {
+      "types": "./dist/src/state.d.ts",
+      "import": "./dist/state.js"
+    },
+    "./db": {
+      "types": "./dist/src/db.d.ts",
+      "import": "./dist/db.js"
+    },
+    "./db/drivers": {
+      "types": "./dist/src/db-drivers.d.ts",
+      "import": "./dist/db-drivers.js"
+    },
+    "./router": {
+      "types": "./dist/src/router.d.ts",
+      "import": "./dist/router.js"
+    },
+    "./animation": {
+      "types": "./dist/src/animation.d.ts",
+      "import": "./dist/animation.js"
+    },
+    "./adapters": {
+      "types": "./dist/src/adapters.d.ts",
+      "import": "./dist/adapters.js"
+    },
+    "./ui": {
+      "types": "./dist/src/ui.d.ts",
+      "import": "./dist/ui.js"
+    },
+    "./utils": {
+      "types": "./dist/src/utils.d.ts",
+      "import": "./dist/utils.js"
+    },
+    "./bundler": {
+      "types": "./dist/src/bundler.d.ts",
+      "import": "./dist/bundler.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "fixer-bundle --mode lib --no-format --no-lint --no-typecheck --no-test",
+    "check": "fixer-bundle --mode lib --no-build --format-check",
+    "test": "vitest run",
+    "prepublishOnly": "bun run build"
+  },
+  "publishConfig": {
+    "registry": "https://registry.fixerframework.com",
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@clerk/backend": "catalog:clerk",
+    "@preact/signals-core": "catalog:preact",
+    "preact": "catalog:peers",
+    "vite": "catalog:peers",
+    "vitest": "catalog:binaries"
+  },
+  "peerDependenciesMeta": {
+    "@clerk/backend": { "optional": true },
+    "@preact/signals-core": { "optional": true },
+    "preact": { "optional": true },
+    "vite": { "optional": true },
+    "vitest": { "optional": true }
+  },
+  "devDependencies": {
+    "@clerk/backend": "catalog:clerk",
+    "@fixerframework/bundler": "workspace:*",
+    "@preact/signals-core": "catalog:preact",
+    "@types/bun": "catalog:types",
+    "preact": "catalog:peers",
+    "vite": "catalog:peers",
+    "vitest": "catalog:binaries"
+  }
+}

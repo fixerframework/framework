@@ -1,46 +1,13 @@
 import { verifyToken } from "@clerk/backend";
 import type { VerifyTokenOptions } from "@clerk/backend";
+import type {
+  ExtractOptions,
+  SessionClaims,
+  SessionTokenResult,
+  VerifyOptions,
+} from "@fixerframework/types/auth/server";
 import { AuthRequiredError } from "../errors.ts";
 import { readCookie } from "./cookie.ts";
-
-/**
- * Clerk session JWT claims we rely on. `sub` is the Clerk user id.
- * Kept as a structural subset (not the full `JwtPayload`) so consumers depend
- * only on the fields this package guarantees.
- */
-export interface SessionClaims {
-  sub: string;
-  sid: string;
-  iss: string;
-  __raw: string;
-  [claim: string]: unknown;
-}
-
-export interface VerifyOptions {
-  /** Clerk secret key (or set CLERK_SECRET_KEY). */
-  secretKey?: string;
-  /** PEM JWKS public key — enables networkless verification. */
-  jwtKey?: string;
-  /** Allowed audience(s) for session tokens. */
-  audience?: string | string[];
-  /** Authorized parties (frontend origins) the token may come from. */
-  authorizedParties?: string[];
-  /** Tolerance for clock drift, in ms. */
-  clockSkewInMs?: number;
-  /** Skip the JWKS cache and always fetch fresh keys. */
-  skipJwksCache?: boolean;
-}
-
-export interface ExtractOptions {
-  /** Authorization header to inspect (default `"Authorization"`). */
-  headerName?: string;
-  /** Cookie name carrying the session token (default `"__session"`). */
-  cookieName?: string;
-}
-
-export type SessionTokenResult =
-  | { valid: true; userId: string; claims: SessionClaims }
-  | { valid: false; reason: "missing" | "invalid"; error?: unknown };
 
 /**
  * Pull a Clerk session token out of a request, preferring the `Authorization:

@@ -9,38 +9,16 @@
  * Pure and deterministic: time is injected via `now()` so tests don't sleep.
  */
 
-export interface RateLimitConfig {
-  /** Bucket size; the maximum burst. */
-  capacity: number;
-  /** Tokens added per second when below capacity. */
-  refillRate: number;
-  /** Override the clock (ms since epoch). Defaults to Date.now. */
-  now?: () => number;
-  /** Max buckets to keep before evicting the oldest (default 10_000). */
-  maxKeys?: number;
-}
-
-export interface RateLimitDecision {
-  allowed: boolean;
-  /** Tokens remaining in the bucket after this check (>= 0). */
-  remaining: number;
-  /** When denied, ms until one token will be available; 0 when allowed. */
-  retryAfterMs: number;
-}
+import type {
+  RateLimitConfig,
+  RateLimitDecision,
+  RateLimiter,
+} from "@fixerframework/types/auth/server";
 
 interface Bucket {
   tokens: number;
   /** ms timestamp of the last refill. */
   updated: number;
-}
-
-export interface RateLimiter {
-  /** Attempt to consume one token for `key`. Never throws. */
-  check(key: string): RateLimitDecision;
-  /** Drop a key's bucket (e.g. after successful auth, to forgive earlier misses). */
-  reset(key: string): void;
-  /** Read-only snapshot, mainly for tests and observability. */
-  remaining(key: string): number;
 }
 
 export function createRateLimiter(config: RateLimitConfig): RateLimiter {

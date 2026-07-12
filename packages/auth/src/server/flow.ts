@@ -1,57 +1,16 @@
 import { encode, decode } from "@auth/core/jwt";
-import type { ExtractOptions, VerifyOptions } from "./token.ts";
+import type {
+  FlowConfig,
+  FlowHandler,
+  FlowResumeResult,
+  SessionPayload,
+} from "@fixerframework/types/auth/server";
 import { extractSessionToken, verifySessionToken } from "./token.ts";
 import { buildClerkRedirect } from "./protect.ts";
 import { readCookie } from "./cookie.ts";
 
 /** Default salt for deriving the encryption key for the app-session JWT. */
 const DEFAULT_SESSION_SALT = "fixerframework.auth.session";
-
-export interface SessionPayload {
-  userId: string;
-  sessionId: string;
-  issuedAt: number;
-  expiresAt: number;
-}
-
-export interface FlowConfig {
-  /** Secret used to encrypt the app-session JWT (@auth/core/jwt). */
-  secret: string;
-  /** Clerk sign-in base URL redirected to on `startFlow`. */
-  signInUrl: string;
-  /** Path Clerk redirects back to after authentication. */
-  callbackPath: string;
-  /** Verification options for the returning Clerk token. */
-  verify: VerifyOptions & ExtractOptions;
-  /** App-session cookie name (default `"ff_session"`). */
-  sessionCookie?: string;
-  /** Cookie stashing the post-auth return target (default `"ff_return_to"`). */
-  returnCookie?: string;
-  /** App-session lifetime in seconds (default 86400, i.e. one day). */
-  maxAge?: number;
-  /** Salt for app-session JWT key derivation (default `"fixerframework.auth.session"`). */
-  sessionSalt?: string;
-  /** Whether to set the Secure flag on cookies (default true; false for HTTP dev). */
-  secure?: boolean;
-  /** Called when the app-session JWT can't be decoded (e.g. wrong secret). No-op by default. */
-  onSessionError?: (error: unknown) => void;
-}
-
-export interface FlowHandler {
-  /** Redirect (302) to Clerk sign-in, stashing where to return afterwards. */
-  startFlow(request: Request, returnTo?: string): Response;
-  /** On the callback path: verify the returning Clerk token, mint an encrypted
-   *  app-session cookie via @auth/core/jwt, and redirect to the return target. */
-  resumeFlow(request: Request): Promise<FlowResumeResult>;
-  /** Decode the app-session cookie networkless. Returns null when absent/expired. */
-  readSession(request: Request): Promise<SessionPayload | null>;
-  /** 302 that clears the app-session and return cookies (sign-out). */
-  clearSession(redirectUrl?: string): Response;
-}
-
-export type FlowResumeResult =
-  | { status: "ok"; response: Response }
-  | { status: "error"; response: Response };
 
 /**
  * Manages the Clerk auth redirect loop: protected route → Clerk sign-in →

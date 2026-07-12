@@ -21,8 +21,11 @@
     "packages/adapters": {
       "name": "@fixerframework/adapters",
       "version": "0.1.0",
+      "dependencies": {
+        "@fixerframework/types": "workspace:*",
+      },
       "devDependencies": {
-        "@fixerframework/bundler": "catalog:workspace",
+        "@fixerframework/bundler": "workspace:*",
         "@types/bun": "catalog:types",
         "@types/node": "catalog:types",
         "vitest": "catalog:binaries",
@@ -35,10 +38,11 @@
       "name": "@fixerframework/animation",
       "version": "0.1.0",
       "dependencies": {
+        "@fixerframework/types": "workspace:*",
         "@preact/signals-core": "catalog:preact",
       },
       "devDependencies": {
-        "@fixerframework/bundler": "catalog:workspace",
+        "@fixerframework/bundler": "workspace:*",
         "@types/bun": "catalog:types",
         "@types/node": "catalog:types",
         "@vitest/utils": "catalog:",
@@ -58,10 +62,11 @@
         "@auth/core": "catalog:clerk",
         "@clerk/backend": "catalog:clerk",
         "@clerk/clerk-js": "catalog:clerk",
+        "@fixerframework/types": "workspace:*",
         "@preact/signals-core": "catalog:preact",
       },
       "devDependencies": {
-        "@fixerframework/bundler": "catalog:workspace",
+        "@fixerframework/bundler": "workspace:*",
         "@types/bun": "catalog:types",
         "vitest": "catalog:binaries",
       },
@@ -94,6 +99,9 @@
     "packages/db": {
       "name": "@fixerframework/db",
       "version": "0.1.0",
+      "dependencies": {
+        "@fixerframework/types": "workspace:*",
+      },
       "devDependencies": {
         "@fixerframework/bundler": "workspace:*",
         "@types/bun": "catalog:types",
@@ -126,10 +134,11 @@
       "name": "@fixerframework/router",
       "version": "0.1.0",
       "dependencies": {
+        "@fixerframework/types": "workspace:*",
         "@preact/signals-core": "catalog:preact",
       },
       "devDependencies": {
-        "@fixerframework/bundler": "catalog:workspace",
+        "@fixerframework/bundler": "workspace:*",
         "@types/bun": "catalog:types",
         "@types/node": "catalog:types",
         "@vitest/utils": "catalog:",
@@ -146,11 +155,12 @@
       "name": "@fixerframework/state",
       "version": "0.1.0",
       "dependencies": {
-        "@fixerframework/utils": "catalog:workspace",
+        "@fixerframework/types": "workspace:*",
+        "@fixerframework/utils": "workspace:*",
         "@preact/signals-core": "catalog:preact",
       },
       "devDependencies": {
-        "@fixerframework/bundler": "catalog:workspace",
+        "@fixerframework/bundler": "workspace:*",
         "@types/bun": "catalog:types",
         "@types/node": "catalog:types",
         "@vitest/utils": "catalog:",
@@ -162,12 +172,40 @@
         "preact": "catalog:peers",
       },
     },
+    "packages/types": {
+      "name": "@fixerframework/types",
+      "version": "0.1.0",
+      "devDependencies": {
+        "@clerk/backend": "catalog:clerk",
+        "@fixerframework/bundler": "workspace:*",
+        "@preact/signals-core": "catalog:preact",
+        "@types/bun": "catalog:types",
+        "preact": "catalog:peers",
+        "vite": "catalog:peers",
+        "vitest": "catalog:binaries",
+      },
+      "peerDependencies": {
+        "@clerk/backend": "catalog:clerk",
+        "@preact/signals-core": "catalog:preact",
+        "preact": "catalog:peers",
+        "vite": "catalog:peers",
+        "vitest": "catalog:binaries",
+      },
+      "optionalPeers": [
+        "@clerk/backend",
+        "@preact/signals-core",
+        "preact",
+        "vite",
+        "vitest",
+      ],
+    },
     "packages/ui": {
       "name": "@fixerframework/ui",
       "version": "0.1.0",
       "dependencies": {
-        "@fixerframework/animation": "catalog:workspace",
-        "@fixerframework/state": "catalog:workspace",
+        "@fixerframework/animation": "workspace:*",
+        "@fixerframework/state": "workspace:*",
+        "@fixerframework/types": "workspace:*",
         "@preact/compat": "catalog:preact",
         "@preact/signals-core": "catalog:preact",
         "class-variance-authority": "catalog:ui",
@@ -175,7 +213,7 @@
         "tailwind-merge": "catalog:ui",
       },
       "devDependencies": {
-        "@fixerframework/bundler": "catalog:workspace",
+        "@fixerframework/bundler": "workspace:*",
         "@types/bun": "catalog:types",
         "@types/node": "catalog:types",
         "@vitest/utils": "catalog:",
@@ -191,8 +229,11 @@
     "packages/utils": {
       "name": "@fixerframework/utils",
       "version": "0.1.0",
+      "dependencies": {
+        "@fixerframework/types": "workspace:*",
+      },
       "devDependencies": {
-        "@fixerframework/bundler": "catalog:workspace",
+        "@fixerframework/bundler": "workspace:*",
         "@types/bun": "catalog:types",
         "vitest": "catalog:binaries",
       },
@@ -257,6 +298,7 @@
       "@fixerframework/db": "workspace:*",
       "@fixerframework/router": "workspace:*",
       "@fixerframework/state": "workspace:*",
+      "@fixerframework/types": "workspace:*",
       "@fixerframework/ui": "workspace:*",
       "@fixerframework/utils": "workspace:*",
     },
@@ -329,6 +371,8 @@
     "@fixerframework/router": ["@fixerframework/router@workspace:packages/router"],
 
     "@fixerframework/state": ["@fixerframework/state@workspace:packages/state"],
+
+    "@fixerframework/types": ["@fixerframework/types@workspace:packages/types"],
 
     "@fixerframework/ui": ["@fixerframework/ui@workspace:packages/ui"],
 
