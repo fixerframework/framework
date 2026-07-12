@@ -1,6 +1,12 @@
 import { existsSync, readFileSync } from "node:fs";
+import { builtinModules } from "node:module";
 import { join } from "node:path";
 import type { LibEntry } from "./types.ts";
+
+const HOST_BUILTINS = new Set<string>([
+  ...builtinModules,
+  ...builtinModules.map((m) => `node:${m}`),
+]);
 
 export function detectLibEntry(cwd: string): string | null {
   const candidates = [join(cwd, "index.ts"), join(cwd, "src", "index.ts")];
@@ -53,10 +59,32 @@ export function readPackageExternals(cwd: string): Set<string> {
   const pkg = JSON.parse(readFileSync(pkgPath, "utf8")) as {
     dependencies?: Record<string, string>;
     peerDependencies?: Record<string, string>;
+    optionalDependencies?: Record<string, string>;
   };
   for (const key of Object.keys(pkg.dependencies ?? {})) names.add(key);
   for (const key of Object.keys(pkg.peerDependencies ?? {})) names.add(key);
+  for (const key of Object.keys(pkg.optionalDependencies ?? {})) names.add(key);
   return names;
+}
+
+/**
+ * Whether a module id is a Node/Bun host builtin that must stay external in lib/server builds.
+ */
+export function isHostBuiltin(id: string): boolean {
+  if (id.startsWith("node:") || id.startsWith("bun:")) return true;
+  if (HOST_BUILTINS.has(id)) return true;
+  // Subpaths like fs/promises
+  const slash = id.indexOf("/");
+  if (slash > 0 && HOST_BUILTINS.has(id.slice(0, slash))) return true;
+  return false;
+}
+
+export function isPackageExternal(id: string, externals: Set<string>): boolean {
+  if (externals.has(id)) return true;
+  for (const name of externals) {
+    if (id === name || id.startsWith(`${name}/`)) return true;
+  }
+  return false;
 }
 
 export function findLocalViteConfig(cwd: string): string | null {

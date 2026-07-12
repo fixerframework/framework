@@ -22,7 +22,7 @@
   ],
   "scripts": {
     "build": "fixer-bundle --mode lib --no-format --no-lint --no-typecheck --no-test",
-    "check": "fixer-bundle --mode lib --no-build",
+    "check": "fixer-bundle --mode lib --no-build --format-check",
     "test": "vitest run",
     "prepublishOnly": "bun run build"
   },
