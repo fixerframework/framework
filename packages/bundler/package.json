@@ -38,7 +38,7 @@
   ],
   "scripts": {
     "build": "vite build && tsgo --emitDeclarationOnly -p tsconfig.build.json && bun run ./scripts/rewrite-dts.ts && chmod +x dist/cli.js",
-    "check": "bun run ./bin/fixer-bundle.ts --mode lib --no-build --cwd .",
+    "check": "bun run ./bin/fixer-bundle.ts --mode lib --no-build --format-check --cwd .",
     "test": "vitest run",
     "prepublishOnly": "bun run build"
   },
