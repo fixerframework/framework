@@ -53,8 +53,17 @@ export function scorePattern(segments: PatternSegment[], index: boolean): number
 
 function resolveId(route: RouteDef, pattern: string): string {
   if (route.id) return route.id;
-  if (route.index) return `${pattern === "/" ? "" : pattern}/index` || "/index";
+  if (route.index) return pattern === "/" ? "/index" : `${pattern}/index`;
   return pattern || "/";
+}
+
+/** Decode a path segment; returns null when the encoding is malformed. */
+function decodeSeg(value: string): string | null {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -119,11 +128,15 @@ function matchSegments(
       i++;
       j++;
     } else if (seg.kind === "param") {
-      params[seg.name] = decodeURIComponent(part);
+      const decoded = decodeSeg(part);
+      if (decoded == null) return null;
+      params[seg.name] = decoded;
       i++;
       j++;
     } else {
-      params[seg.name] = decodeURIComponent(parts.slice(j).join("/"));
+      const decoded = decodeSeg(parts.slice(j).join("/"));
+      if (decoded == null) return null;
+      params[seg.name] = decoded;
       i++;
       j = parts.length;
     }
@@ -161,10 +174,14 @@ function matchPrefix(segments: PatternSegment[], pathname: string): Record<strin
       if (seg.value !== part) return null;
       j++;
     } else if (seg.kind === "param") {
-      params[seg.name] = decodeURIComponent(part);
+      const decoded = decodeSeg(part);
+      if (decoded == null) return null;
+      params[seg.name] = decoded;
       j++;
     } else {
-      params[seg.name] = decodeURIComponent(parts.slice(j).join("/"));
+      const decoded = decodeSeg(parts.slice(j).join("/"));
+      if (decoded == null) return null;
+      params[seg.name] = decoded;
       j = parts.length;
     }
   }

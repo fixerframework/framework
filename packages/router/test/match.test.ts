@@ -59,4 +59,8 @@ describe("matchRoutes", () => {
     const m = matchRoutes(routes, "/blog/");
     expect(m!.map((x) => x.id)).toEqual(["root", "blog", "blog-index"]);
   });
+
+  it("returns null for malformed percent-encoding in params", () => {
+    expect(matchRoutes([{ path: "/:id", id: "p" }], "/%E0%A4%A")).toBeNull();
+  });
 });

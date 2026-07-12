@@ -24,8 +24,7 @@ Options:
   --no-test          Skip vitest
   --no-build         Quality gate only
   --format-check     oxfmt check (no write)
-  --watch            Watch vitest and Vite (local/explicit config only).
-                     Zero-config programmatic build does not watch yet.
+  --watch            Watch vitest and Vite (config file or zero-config build).
                      Without --no-test, vitest watch runs first and blocks build.
   -h, --help         Show help
 `;

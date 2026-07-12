@@ -4,11 +4,16 @@ import type { CliOptions, StepResult } from "../types.ts";
 import { resolveBin } from "../resolve-bin.ts";
 import { runCommand } from "../run.ts";
 
-function projectFlag(cwd: string): string[] {
-  const build = join(cwd, "tsconfig.build.json");
+/**
+ * Prefer the full package tsconfig for quality gates (includes tests when configured).
+ * Fall back to tsconfig.build.json only when no base config exists.
+ * DTS emit still uses tsconfig.build.json in the build step.
+ */
+export function typecheckProjectArgs(cwd: string): string[] {
   const base = join(cwd, "tsconfig.json");
-  if (existsSync(build)) return ["-p", "tsconfig.build.json"];
+  const build = join(cwd, "tsconfig.build.json");
   if (existsSync(base)) return ["-p", "tsconfig.json"];
+  if (existsSync(build)) return ["-p", "tsconfig.build.json"];
   return [];
 }
 
@@ -27,7 +32,7 @@ export function isTsPlatformShim(tscPath: string): boolean {
 }
 
 export async function runTypecheck(options: CliOptions): Promise<StepResult> {
-  const project = projectFlag(options.cwd);
+  const project = typecheckProjectArgs(options.cwd);
   const tsgo = resolveBin("tsgo");
   if (tsgo) {
     const result = await runCommand({
