@@ -1,6 +1,7 @@
 import type { ComponentChildren, JSX } from "preact";
 import { createContext } from "preact";
-import { useContext, useMemo, useRef, useState } from "preact/hooks";
+import { useContext, useLayoutEffect, useMemo, useRef, useState } from "preact/hooks";
+import { useId } from "../a11y/use-id.ts";
 import { useRoving } from "../a11y/use-roving.ts";
 import { cn } from "../lib/cn.ts";
 
@@ -8,7 +9,8 @@ interface TabsCtx {
   value: string;
   setValue: (v: string) => void;
   tabs: string[];
-  register: (id: string) => number;
+  register: (id: string) => void;
+  baseId: string;
 }
 
 const TabsContext = createContext<TabsCtx | null>(null);
@@ -34,9 +36,11 @@ function Root({
   children,
   className,
 }: TabsRootProps) {
-  const tabsRef = useRef<string[]>([]);
+  const [tabList, setTabList] = useState<string[]>([]);
+  const pending = useRef<string[]>([]);
   const [internal, setInternal] = useState(defaultValue);
   const value = controlled ?? internal;
+  const baseId = useId("tabs");
 
   const setValue = (v: string) => {
     if (controlled === undefined) setInternal(v);
@@ -44,22 +48,29 @@ function Root({
   };
 
   const register = (id: string) => {
-    let idx = tabsRef.current.indexOf(id);
-    if (idx === -1) {
-      tabsRef.current.push(id);
-      idx = tabsRef.current.length - 1;
+    if (!pending.current.includes(id)) {
+      pending.current = [...pending.current, id];
     }
-    return idx;
   };
+
+  useLayoutEffect(() => {
+    const next = pending.current;
+    pending.current = [];
+    setTabList((prev) => {
+      if (prev.length === next.length && prev.every((id, i) => id === next[i])) return prev;
+      return next;
+    });
+  });
 
   const ctx = useMemo(
     () => ({
       value,
       setValue,
-      tabs: tabsRef.current,
+      tabs: tabList,
       register,
+      baseId,
     }),
-    [value],
+    [value, tabList, baseId],
   );
 
   return (
@@ -112,15 +123,19 @@ function Trigger({
   value: string;
   children?: ComponentChildren;
 }) {
-  const { value, setValue, register } = useTabsCtx();
+  const { value, setValue, register, baseId } = useTabsCtx();
   register(tabValue);
   const selected = value === tabValue;
+  const triggerId = `${baseId}-tab-${tabValue}`;
+  const panelId = `${baseId}-panel-${tabValue}`;
 
   return (
     <button
       type="button"
       role="tab"
+      id={triggerId}
       aria-selected={selected}
+      aria-controls={panelId}
       tabIndex={selected ? 0 : -1}
       data-state={selected ? "active" : "inactive"}
       className={cn(
@@ -147,11 +162,15 @@ function Content({
   value: string;
   children?: ComponentChildren;
 }) {
-  const { value } = useTabsCtx();
+  const { value, baseId } = useTabsCtx();
   if (value !== tabValue) return null;
+  const triggerId = `${baseId}-tab-${tabValue}`;
+  const panelId = `${baseId}-panel-${tabValue}`;
   return (
     <div
       role="tabpanel"
+      id={panelId}
+      aria-labelledby={triggerId}
       data-state="active"
       className={cn(
         "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
