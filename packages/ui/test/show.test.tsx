@@ -38,7 +38,7 @@ describe("Show", () => {
   });
 
   it("passes value to function children", () => {
-    const el = mount(<Show when={"world" as string | false}>{(v) => <span>hi {v}</span>}</Show>);
+    const el = mount(<Show when={"world" as string | null}>{(v) => <span>hi {v}</span>}</Show>);
     expect(el.textContent).toBe("hi world");
   });
 });

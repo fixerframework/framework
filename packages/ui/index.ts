@@ -74,5 +74,12 @@ export { Tabs, type TabsRootProps } from "./src/primitives/tabs.tsx";
 
 export { Show, type ShowProps, type ShowWhen } from "./src/state/show.tsx";
 export { Await, type AwaitProps } from "./src/state/await.tsx";
-export { bind, bindChecked, type BindTextProps, type BindCheckboxProps } from "./src/state/bind.ts";
+export {
+  bind,
+  bindChecked,
+  useBound,
+  useBoundChecked,
+  type BindTextProps,
+  type BindCheckboxProps,
+} from "./src/state/bind.ts";
 export { Match, type MatchProps, type MatchValue } from "./src/state/match.tsx";
