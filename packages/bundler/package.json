@@ -3,13 +3,17 @@
   "version": "0.1.0",
   "description": "Shared Vite/Rolldown build CLI and config factories for FixerFramework packages and apps",
   "license": "MIT",
+  "bin": {
+    "fixer-bundle": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "bin": {
-    "fixer-bundle": "./dist/cli.js"
-  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -32,19 +36,15 @@
       "import": "./dist/vitest.js"
     }
   },
-  "files": [
-    "dist",
-    "README.md"
-  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.fixerframework.com"
+  },
   "scripts": {
     "build": "vite build && tsgo --emitDeclarationOnly -p tsconfig.build.json && bun run ./scripts/rewrite-dts.ts && chmod +x dist/cli.js",
     "check": "bun run ./bin/fixer-bundle.ts --mode lib --no-build --format-check --cwd .",
     "test": "vitest run",
     "prepublishOnly": "bun run build"
-  },
-  "publishConfig": {
-    "registry": "https://registry.fixerframework.com",
-    "access": "public"
   },
   "dependencies": {
     "@typescript/native-preview": "catalog:typescript",
